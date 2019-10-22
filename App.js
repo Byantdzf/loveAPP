@@ -26,6 +26,9 @@ import welcome from './src/welcome'
 import login from './src/login';
 import basics from './src/basics';
 import GrayScreen from './src/GrayScreen ';
+import home from "./src/home";
+import userDetail from "./src/userDetail";
+
 // const App = () => {
 //     return (
 //         <Router>
@@ -58,17 +61,28 @@ export default class App extends Component<Props> {
                            component={welcome}
                            title="启动页"
                            hideNavBar={true}
+                           // initial
                     />
                     <Scene key="login"
                            component={login}
                            title="登录"
                            hideNavBar={true}
+                           initial
                     />
                     <Scene key="basics"
                            component={basics}
                            title="基本资料"
                            hideNavBar={true}
-                           initial
+                    />
+                    <Scene key="home"
+                           component={home}
+                           title="首页"
+                           hideNavBar={true}
+                    />
+                    <Scene key="userDetail"
+                           component={userDetail}
+                           title="用户详情"
+                           hideNavBar={true}
                     />
 
                     <Scene

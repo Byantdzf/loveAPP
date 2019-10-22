@@ -15,8 +15,11 @@
     "antd-iconfont": "^3.0.3",
     "react": "16.9.0",
     "react-native": "0.61.2",
+    "react-native-action-button": "^2.8.5",
+    "react-native-datepicker": "^1.7.2",
     "react-native-picker": "^4.3.7",
     "react-native-picker-select": "^6.3.3",
+    "react-native-refreshlist": "^1.0.3",
     "react-native-router-flux": "^4.0.6"
   },
   "devDependencies": {

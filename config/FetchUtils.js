@@ -1,4 +1,6 @@
 import React from "react";
+import DeviceStorage from '../config/DeviceStorage';
+import {Actions} from "react-native-router-flux";
 
 /**
  * 让fetch也可以timeout
@@ -32,17 +34,25 @@ function timeout_fetch(fetch_promise, timeout = 10000) {
 }
 
 
-let common_url = 'http://love.hankin.ufutx.cn/api/';  //服务器地址
+let common_url = 'https://love.ufutx.com/api/';  //服务器地址
 let token = '';
 
 const fetchRequest = (url, method, params = '') =>{
+    DeviceStorage.get('token').then((res) => {
+        if (res == null || res == '') {
+            // setTimeout(() => {
+            //     Actions.login()
+            // }, 800)
+        } else {
+            token = res
+        }
+    })
     let header = {
         "Content-Type": "application/json;charset=UTF-8",
-        "accesstoken": token  //用户登陆后返回的token，某些涉及用户数据的接口需要在header中加上token
+        "Authorization": 'Bearer ' + token  //用户登陆后返回的token，某些涉及用户数据的接口需要在header中加上token
     };
-    console.log(common_url + url)
     console.log('request url:', url, params);  //打印请求参数
-    if (params == '') {   //如果网络请求中带有参数
+    if (params == '') {   //如果网络请求中没带有参数
         return new Promise(function (resolve, reject) {
             timeout_fetch(fetch(common_url + url, {
                 method: method,
@@ -55,7 +65,7 @@ const fetchRequest = (url, method, params = '') =>{
                 .catch((err) => {
                     console.log('err:', url, err);     //网络请求失败返回的数据
                     reject(err);
-                    alert('服务器异常！请重试...')
+                    alert('网络异常！请重试...')
                 });
         });
     } else {   //如果网络请求中没有参数

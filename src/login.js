@@ -73,7 +73,7 @@ export default class login extends Component {
             mobile: this.state.mobile.replace(/\s+/g, ""),
             code: this.state.code
         }
-        fetchRequest('official/app/login ', 'POST', data)
+        fetchRequest('official/app/login', 'POST', data)
             .then(res => {
                 console.log(res)
                 if (res.code == 1){
@@ -106,13 +106,13 @@ export default class login extends Component {
         let codeIcon = {uri: 'https://images.ufutx.com/201910/17/0fdfd6313dcf3045f69da3dcbc0244e6.png'};
         return (
             <Provider>
-                <View style={{backgroundColor: '#ffffff', height: height,}}>
+                <View style={{backgroundColor: '#ffffff', flex: 1}}>
                     <Image source={backPic} style={styles.backPic}/>
                     <List style={styles.box}>
                         <InputItem
                             clear
-                            error
                             type="phone"
+                            styles={{color: '#fff'}}
                             value={this.state.mobile}
                             onChange={value => {
                                 this.setState({
@@ -126,10 +126,8 @@ export default class login extends Component {
                     </List>
                     <List style={styles.box}>
                         <InputItem
-                            clear
-                            error
                             type="number"
-                            maxLength = {4}
+                            maxLength = {9}
                             value={this.state.code}
                             styles={styles.codeInput}
                             onChange={value => {

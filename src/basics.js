@@ -1,89 +1,42 @@
 import React, {Component} from 'react';
-import {Image, Text, View, TouchableOpacity, StyleSheet, Dimensions, ImageBackground, TextInput } from 'react-native';
+import {Image, Text, View, TouchableOpacity, StyleSheet, Dimensions, ImageBackground, TextInput, DatePickerIOS} from 'react-native';
 import {Actions} from "react-native-router-flux";
 import {fetchRequest} from '../config/FetchUtils';
 import {Button, InputItem, List, Toast, Provider} from '@ant-design/react-native';
 import DeviceStorage from '../config/DeviceStorage';
 import Pickers from '../config/Picker'
+import DatePicker from 'react-native-datepicker'
 export default class login extends Component {
     constructor(props) { // 初始化数据
         super(props);
         this.state = {
-            name: '1222222',
+            name: '',
             sex: '男',
-            belief: '其他'
+            belief: '其他',
+            datetime: '1990-01-01'
         }
-    }
-    getCode() {
-        if (!this.state.mobile) {
-            Toast.offline('请先输入手机号');
-            return
-        }
-        if (!this.state.codeActive) {
-            return
-        }
-        let data = {
-            mobile: this.state.mobile.replace(/\s+/g, "")
-        }
-        fetchRequest('official/sms/register', 'POST', data)
-            .then(res => {
-                console.log(res)
-                if (res.code == 1){
-                    Toast.offline('手机号无效');
-                    return
-                }
-                this.setState({
-                    text:  '秒后重试'
-                });
-                this.setState({
-                    codeActive: !this.state.codeActive
-                });
-                this.inputRef.focus();
-                this.state.timer = setInterval(() => {
-                    this.setState({
-                        time:  this.state.time-1
-                    });
-                    if (this.state.time == 0){
-                        this.setState({
-                            time:  60
-                        });
-                        clearInterval(this.state.timer)
-                        this.setState({
-                            text:  '获取验证码'
-                        });
-                        this.setState({
-                            codeActive: !this.state.codeActive
-                        });
-                    }
-                }, 1000);
-            }).catch(err => {
-            console.log(`异常: ${err}`);
-        })
     }
     login() {
-        if (!this.state.code){
-            Toast.offline('请输入正确的验证码');
+        console.log()
+        if (!this.state.name){
+            Toast.offline('请填写昵称');
+            this.inputRef.focus();
             return
         }
-        console.log(this.state.mobile.replace(/\s+/g, ""))
-        console.log(this.state.code)
+        // console.log(this.state.mobile.replace(/\s+/g, ""))
+        // console.log(this.state.code)
         let data = {
-            mobile: this.state.mobile.replace(/\s+/g, ""),
-            code: this.state.code
+            name: this.state.name,
+            sex: this.state.sex === '男'? '1': '2',
+            belief: this.state.belief,
+            birthday: this.state.datetime
         }
-        fetchRequest('official/app/login ', 'POST', data)
+        console.log(data)
+        fetchRequest('official/app/user/profile', 'POST', data)
             .then(res => {
                 console.log(res)
-                if (res.code == 1){
-                    Toast.offline(res.message);
-                    this.inputRef.focus();
-                    return
-                } else {
-                    Toast.success('登录成功');
-                    DeviceStorage.save("token", res.data.token);
-                    DeviceStorage.save("user", res.data.user);
-                    Actions.gray()
-                }
+                Toast.success('保存成功');
+                Actions.home()
             }).catch(err => {
             console.log(`异常: ${err}`);
         })
@@ -91,8 +44,9 @@ export default class login extends Component {
 
     selectSex() {
         Pickers.show(['男', '女'], this.state.sex, (value) => {
+            console.log(value)
             this.setState({
-                sex: value,
+                sex: value.join(','),
             });
         })
     }
@@ -101,7 +55,7 @@ export default class login extends Component {
         let beliefs = ['基督教', '佛教', '伊斯兰教', '其他']
         Pickers.show(beliefs, this.state.belief, (value) => {
             this.setState({
-                belief: value,
+                belief: value.join(','),
             });
         })
     }
@@ -123,70 +77,69 @@ export default class login extends Component {
                 <View style={{backgroundColor: '#ffffff', height: height,}}>
                     <Image source={backPic} style={styles.backPic}/>
                     <View style={[styles.touchConainer, {width: width * .8}]}>
-                        <Text style={{color: '#666'}}>基本资料</Text>
-                        <List style={styles.box}  renderHeader={'基本资料'}>
+                        <Text style={{color: '#666', padding: 12, paddingTop: 0}}>基本资料</Text>
+                        <List style={styles.box}  >
                             <InputItem
                                 clear
-                                error
-                                type="phone"
-                                value={this.state.mobile}
+                                erro
+                                style={styles.InputItemStyle}
+                                value={this.state.name}
+                                ref={el => (this.inputRef = el)}
                                 onChange={value => {
                                     this.setState({
-                                        mobile: value,
+                                        name: value,
                                     });
                                 }}
-                                placeholder="手机号"
+                                placeholder="昵称"
                             >
+                                昵称
                                 {/*<Image source={phoneIcon} style={styles.icon}/>*/}
                             </InputItem>
+                            <TouchableOpacity onPress={() => {this.selectSex()}}>
+                                <InputItem
+                                    value={this.state.sex}
+                                    style={styles.InputItemStyle}
+                                    editable={false}
+                                    placeholder="性别"
+                                >
+                                    性别
+                                </InputItem>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => {this.selectBelief()}}>
+                                <InputItem
+                                    value={this.state.belief}
+                                    style={styles.InputItemStyle}
+                                    editable={false}
+                                    placeholder="信仰"
+                                >
+                                    信仰
+                                </InputItem>
+                            </TouchableOpacity>
+                            <View style={styles.DatePickerBox}>
+                                <Text style={[styles.DatePickerText,{width: width * .2,}]}>出生日期</Text>
+                                <DatePicker
+                                    style={styles.dateStyle}
+                                    date={this.state.datetime}
+                                    customStyles = {{
+                                        dateInput : {
+                                            marginLeft : 22,
+                                            borderColor: '#fff',
+                                            lineHeight: 16,
+                                            height: 22,
+                                            fontSize: 100,
+                                            transform: [{scale:1.08}]
+                                        }
+                                    }}
+                                    mode="date"
+                                    placeholder="选择"
+                                    format="YYYY-MM-DD"
+                                    confirmBtnText="确定"
+                                    cancelBtnText="取消"
+                                    showIcon={false}
+                                    onDateChange={(date) => {this.setState({datetime: date})}}
+                                />
+                            </View>
                         </List>
-                        <View style={styles.listItem}>
-                            <Text style={{fontSize: 16, width: width * .2}}>昵称</Text>
-                            <TextInput
-                                style={[styles.textInput, {width: width * .42,}]}
-                                onChangeText={value => {
-                                    this.setState({
-                                        name: value,
-                                    });
-                                    console.log(this.state.name)
-                                }}
-                                onPress={() => {
-                                    Pickers.hide()
-                                }}
-                                defaultValue={this.state.name}
-                            />
-                            <Image source={codeIcon} style={styles.icon}/>
-                        </View>
-                        <View style={styles.listItem}>
-                            <Text style={{fontSize: 16, width: width * .2,}}>性别</Text>
-                            <Text style={[styles.textInput, {width: width * .42,}]} onPress={() => {
-                                this.selectSex()
-                            }}>
-                                {this.state.sex}
-                            </Text>
-                            <Image source={codeIcon} style={styles.icon}/>
-                        </View>
-                        <View style={styles.listItem}>
-                            <Text style={{fontSize: 16, width: width * .2,}}>信仰</Text>
-                            <Text style={[styles.textInput, {width: width * .42,}]} onPress={() => {
-                                this.selectBelief()
-                            }}>
-                                {this.state.belief}
-                            </Text>
-                            <Image source={codeIcon} style={styles.icon}/>
-                        </View>
-                        <View style={styles.listItem}>
-                            <Text style={{fontSize: 16, width: width * .2,}}>出生日期</Text>
-                            <TextInput style={[styles.textInput, {width: width * .42,}]} onChangeText={value => {
-                                    this.setState({
-                                        name: value,
-                                    });
-                                    console.log(this.state.name)
-                                }}
-                                defaultValue={this.state.name}
-                            />
-                            <Image source={codeIcon} style={styles.icon}/>
-                        </View>
                         <View style={{height: 32}}></View>
                         <TouchableOpacity onPress={() => {
                             this.login()
@@ -208,17 +161,34 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         shadowColor:'#000000'
     },
+    box: {
+    },
+    InputItemStyle: {
+        fontSize: 16,
+    },
     textInput: {
-        // backgroundColor: 'pink',
         padding: 0,
         textAlign: 'right',
         color: '#666',
         marginTop: -2,
         marginLeft: 32,
         fontSize: 16,
-        // borderBottomWidth: .5,
-        // borderBottomColor: '#666'
     },
+    DatePickerBox: {
+        flexDirection: 'row',
+        justifyContent: 'flex-start'
+    },
+    DatePickerText: {
+        fontSize: 16,
+        marginTop: 10,
+        marginLeft: 15,
+    },
+    dateStyle: {
+        width: 120,
+        borderColor: '#fff',
+        marginLeft: -22
+    },
+
     backPic: {
         height: 269,
         zIndex: 999,
