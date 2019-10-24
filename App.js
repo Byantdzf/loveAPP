@@ -61,13 +61,13 @@ export default class App extends Component<Props> {
                            component={welcome}
                            title="启动页"
                            hideNavBar={true}
-                           // initial
+                           initial
                     />
                     <Scene key="login"
                            component={login}
                            title="登录"
                            hideNavBar={true}
-                           initial
+                           // initial
                     />
                     <Scene key="basics"
                            component={basics}
