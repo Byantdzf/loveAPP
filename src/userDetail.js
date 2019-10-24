@@ -101,7 +101,7 @@ export default class SampleAppMovies extends Component {
             }
         })
         console.log(items)
-        let iconText = user.sex === 1 ?
+        let iconText = user.sex == 1 ?
             <Image source={man} style={styles.iconStyle}/> :
             <Image source={woman} style={styles.iconStyle}/>;
         return (
@@ -143,7 +143,7 @@ export default class SampleAppMovies extends Component {
                     </View>
                     <View style={[styles.containerText,{marginTop: -6}]}>
                         <Text style={{marginLeft: 8,color: '#97979f',fontSize: 12}}>
-                            {user.profile_courtship.age+'岁'} {user.profile_courtship.stature+'岁'} {user.industry}/{user.industry_sub}
+                            {user.age} {user.profile_courtship.stature+'cm'} {user.industry}/{user.industry_sub}
                         </Text>
                     </View>
                     {/*原始ui*/}
@@ -209,8 +209,8 @@ export default class SampleAppMovies extends Component {
     // 基本资料
     userBasics() {
         const {user} = this.state
-        let age = user.profile_courtship.age ?
-            <Text style={styles.itemStyle}>{user.profile_courtship.age + '岁'} </Text> : null,
+        let age = user.age ?
+            <Text style={styles.itemStyle}>{'年龄：' + user.age} </Text> : null,
             stature = user.profile_courtship.stature ?
                 <Text style={styles.itemStyle}>{user.profile_courtship.stature + 'cm'} </Text> : null,
             weight = user.profile_courtship.weight ?

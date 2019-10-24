@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Image, Text, View, TouchableOpacity, StyleSheet, Dimensions, ImageBackground, TextInput, DatePickerIOS} from 'react-native';
 import {Actions} from "react-native-router-flux";
 import {fetchRequest} from '../config/FetchUtils';
-import {Button, InputItem, List, Toast, Provider} from '@ant-design/react-native';
+import {Button, InputItem, List, Toast, Provider, Radio} from '@ant-design/react-native';
 import DeviceStorage from '../config/DeviceStorage';
 import Pickers from '../config/Picker'
 import DatePicker from 'react-native-datepicker'
@@ -13,6 +13,7 @@ export default class login extends Component {
             name: '',
             sex: '男',
             belief: '其他',
+            part1Value: 1,
             datetime: '1990-01-01'
         }
     }
@@ -32,11 +33,31 @@ export default class login extends Component {
             birthday: this.state.datetime
         }
         console.log(data)
+        Toast.loading('保存中...', .6);
+
         fetchRequest('official/app/user/profile', 'POST', data)
             .then(res => {
                 console.log(res)
                 Toast.success('保存成功');
                 Actions.home()
+            }).catch(err => {
+            console.log(`异常: ${err}`);
+        })
+    }
+
+    getUser() {
+        fetchRequest('official/app/user/profile', 'GET')
+            .then(res => {
+                let {name,profile_courtship} = res.data
+                console.log(profile_courtship)
+                if (profile_courtship) {
+                    this.setState({
+                        name: name,
+                        sex: profile_courtship.sex == 1?'男':'女',
+                        belief: profile_courtship.belief,
+                        datetime: profile_courtship.birthday,
+                    });
+                }
             }).catch(err => {
             console.log(`异常: ${err}`);
         })
@@ -67,6 +88,7 @@ export default class login extends Component {
     //已经加载虚拟DOM，在render之后，只执行一次，可在此完成异步网络请求或集成其他JavaScript库
     componentDidMount() {
         // console.log('componentDidMount...')
+        this.getUser()
     }
 
     render() {
@@ -78,6 +100,30 @@ export default class login extends Component {
                     <Image source={backPic} style={styles.backPic}/>
                     <View style={[styles.touchConainer, {width: width * .8}]}>
                         <Text style={{color: '#666', padding: 12, paddingTop: 0}}>基本资料</Text>
+                        <View style={{ flexDirection: 'row', justifyContent: 'flex-start'}}>
+                            {/*<Radio*/}
+                                {/*checked={this.state.part1Value === 1}*/}
+                                {/*onChange={event => {*/}
+                                    {/*if (event.target.checked) {*/}
+                                        {/*this.setState({ part1Value: 1 });*/}
+                                    {/*}*/}
+                                {/*}}*/}
+                                {/*style={{ borderWidth: 1, borderColor: '#999', margin: 10 }}*/}
+                            {/*>*/}
+                                {/*单身*/}
+                            {/*</Radio>*/}
+                            {/*<Radio*/}
+                                {/*checked={this.state.part1Value === 2}*/}
+                                {/*onChange={event => {*/}
+                                    {/*if (event.target.checked) {*/}
+                                        {/*this.setState({ part1Value: 2 });*/}
+                                    {/*}*/}
+                                {/*}}*/}
+                                {/*style={{ borderWidth: 1, borderColor: '#999', margin: 10 }}*/}
+                            {/*>*/}
+                                {/*介绍人*/}
+                            {/*</Radio>*/}
+                        </View>
                         <List style={styles.box}  >
                             <InputItem
                                 clear

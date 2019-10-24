@@ -73,6 +73,7 @@ export default class login extends Component {
             mobile: this.state.mobile.replace(/\s+/g, ""),
             code: this.state.code
         }
+        Toast.loading('登录中...', .6);
         fetchRequest('official/app/login', 'POST', data)
             .then(res => {
                 console.log(res)

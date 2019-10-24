@@ -51,13 +51,14 @@ const fetchRequest = (url, method, params = '') =>{
         "Content-Type": "application/json;charset=UTF-8",
         "Authorization": 'Bearer ' + token  //用户登陆后返回的token，某些涉及用户数据的接口需要在header中加上token
     };
+    console.log(header)
     console.log('request url:', url, params);  //打印请求参数
     if (params == '') {   //如果网络请求中没带有参数
         return new Promise(function (resolve, reject) {
             timeout_fetch(fetch(common_url + url, {
                 method: method,
                 headers: header
-            })).then((response) => {return response.json()})
+            })).then((response) => response.json())
                 .then((responseData) => {
                     console.log('res:', url, responseData);  //网络请求成功返回的数据
                     resolve(responseData);
