@@ -102,8 +102,8 @@ export default class SampleAppMovies extends Component {
         })
         console.log(items)
         let iconText = user.sex == 1 ?
-            <Image source={man} style={[styles.iconStyle,{marginTop: width*.007}]}/> :
-            <Image source={woman} style={[styles.iconStyle,{marginTop: width*.007}]}/>;
+            <Image source={man} style={[styles.iconStyle]}/> :
+            <Image source={woman} style={[styles.iconStyle]}/>;
         return (
             <View style={{backgroundColor: "#fff", minHeight: height,}}>
                 <ScrollView>
