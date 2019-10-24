@@ -276,7 +276,7 @@ export default class SampleAppMovies extends Component {
                             {item.age} {item.profile_courtship.stature+'cm'} {item.industry}/{item.industry_sub}
                         </Text>
                     </View>
-                    <View style={[styles.dotStyle,{width: width}]}></View>
+                    {/*<View style={[styles.dotStyle,{width: width}]}></View>*/}
                 </View>
             </TouchableOpacity>
         );
