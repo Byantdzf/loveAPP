@@ -122,7 +122,7 @@ export default class SampleAppMovies extends Component {
                         data={this.state.list}
                         renderItem={this.renderMovie}
                         style={styles.list}
-                        keyExtractor={item => item.id}
+                        keyExtractor={(item, index) => index.toString()}
                         ListFooterComponent={this._renderFooter.bind(this)}
                         onEndReached={this._onEndReached.bind(this)}
                         onEndReachedThreshold={1}

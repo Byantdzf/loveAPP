@@ -126,6 +126,7 @@ export default class SampleAppMovies extends Component {
                             {items.map((item, index) => {
                                 return (
                                     <Image
+                                        key={index}
                                         source={item}
                                         id={index}
                                         style={[styles.thumbnail,{width: width, height: width}]}
