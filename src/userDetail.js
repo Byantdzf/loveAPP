@@ -135,7 +135,7 @@ export default class SampleAppMovies extends Component {
                         </Carousel>
                     </View>
                     <View style={styles.containerText}>
-                        <View style={{flexDirection: "row", justifyContent: "flex-start",}}>
+                        <View style={{flexDirection: "row", justifyContent: "flex-start",alignItems: 'center', flex: 1,}}>
                             <Text style={{marginLeft: 8,fontSize: 16}}>{user.name}</Text>
                             {iconText}
                         </View>
