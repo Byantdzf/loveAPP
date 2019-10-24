@@ -102,8 +102,8 @@ export default class SampleAppMovies extends Component {
         })
         console.log(items)
         let iconText = user.sex == 1 ?
-            <Image source={man} style={styles.iconStyle}/> :
-            <Image source={woman} style={styles.iconStyle}/>;
+            <Image source={man} style={[styles.iconStyle,{marginTop: width*.007}]}/> :
+            <Image source={woman} style={[styles.iconStyle,{marginTop: width*.007}]}/>;
         return (
             <View style={{backgroundColor: "#fff", minHeight: height,}}>
                 <ScrollView>
@@ -307,7 +307,7 @@ const styles = StyleSheet.create({
         marginBottom: 6
     },
     iconStyle: {
-        width: 16, height: 16, marginTop: 2.8, marginLeft: 2,
+        width: 16, height: 16, marginLeft: 2,
     },
     dotStyle: {
         height: 4,

@@ -98,6 +98,7 @@ export default class login extends Component {
             <Provider>
                 <View style={{backgroundColor: '#ffffff', height: height,}}>
                     <Image source={backPic} style={styles.backPic}/>
+
                     <View style={[styles.touchConainer, {width: width * .8}]}>
                         <Text style={{color: '#666', padding: 12, paddingTop: 0}}>基本资料</Text>
                         <View style={{ flexDirection: 'row', justifyContent: 'flex-start'}}>
