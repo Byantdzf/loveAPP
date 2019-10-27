@@ -32,6 +32,8 @@ export default class login extends Component {
             birthday: this.state.datetime
         }
         console.log(data)
+        Toast.loading('保存信息中...', .8);
+
         fetchRequest('official/app/user/profile', 'POST', data)
             .then(res => {
                 console.log(res)
