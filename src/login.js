@@ -11,8 +11,8 @@ export default class login extends Component {
         super(props);
         this.state = {
             text: '获取验证码',
-            mobile: '15707534403',
-            code: '999999999',
+            mobile: '',
+            code: '',
             timer: '',
             time: 60,
             codeActive: true,
