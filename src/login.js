@@ -99,6 +99,18 @@ export default class login extends Component {
     //已经加载虚拟DOM，在render之后，只执行一次，可在此完成异步网络请求或集成其他JavaScript库
     componentDidMount() {
         // console.log('componentDidMount...')
+        DeviceStorage.get('token').then((res) => {
+            console.log(res)
+            // if (res == null || res == '') {
+            //     setTimeout(() => {
+            //         Actions.login()
+            //     }, 800)
+            // } else {
+            //     setTimeout(() => {
+            //         Actions.home()
+            //     }, 800)
+            // }
+        })
     }
 
     render() {

@@ -36,30 +36,33 @@ function timeout_fetch(fetch_promise, timeout = 10000) {
 
 let common_url = 'https://love.ufutx.com/api/';  //服务器地址
 let token = '';
-
+DeviceStorage.get('token').then((res) => {
+    if (res == null || res == '') {
+        // setTimeout(() => {
+        //     Actions.login()
+        // }, 800)
+    } else {
+        token = res
+    }
+})
 const fetchRequest = (url, method, params = '') =>{
-    DeviceStorage.get('token').then((res) => {
-        if (res == null || res == '') {
-            // setTimeout(() => {
-            //     Actions.login()
-            // }, 800)
-        } else {
-            token = res
-        }
-    })
     let header = {
         "Content-Type": "application/json;charset=UTF-8",
         "Authorization": 'Bearer ' + token  //用户登陆后返回的token，某些涉及用户数据的接口需要在header中加上token
     };
+    console.log(header)
     console.log('request url:', url, params);  //打印请求参数
     if (params == '') {   //如果网络请求中没带有参数
         return new Promise(function (resolve, reject) {
             timeout_fetch(fetch(common_url + url, {
                 method: method,
                 headers: header
-            })).then((response) => {return response.json()})
+            })).then((response) => response.json())
                 .then((responseData) => {
                     console.log('res:', url, responseData);  //网络请求成功返回的数据
+                    if (responseData.code == 2) {
+                        return  Actions.login()
+                    }
                     resolve(responseData);
                 })
                 .catch((err) => {

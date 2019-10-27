@@ -1,7 +1,7 @@
 
 import React, { Component } from "react";
 
-import {Image, FlatList, StyleSheet, Text, View, Dimensions, TouchableOpacity, ActivityIndicator} from "react-native";
+import {Image, FlatList, StyleSheet, Text, View, Dimensions, TouchableOpacity, ActivityIndicator, SafeAreaView} from "react-native";
 import {fetchRequest} from '../config/FetchUtils';
 import {SearchBar, Toast, Provider} from "@ant-design/react-native";
 import {Actions} from "react-native-router-flux";
@@ -101,47 +101,49 @@ export default class SampleAppMovies extends Component {
         //     : null;
 
         return (
-            <Provider>
-                <SearchBar
-                    // defaultValue="初始值"
-                    placeholder="搜索"
-                    value={this.state.keyword}
-                    onSubmit={value => {
-                        this.onSubmit(value)
-                    }}
-                    onCancel={() => {
-                        this.clear()
-                    }}
-                    onChange={value => {
-                        this.onChange(value)
-                    }}
+            <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
+                <Provider>
+                    <SearchBar
+                        // defaultValue="初始值"
+                        placeholder="搜索"
+                        value={this.state.keyword}
+                        onSubmit={value => {
+                            this.onSubmit(value)
+                        }}
+                        onCancel={() => {
+                            this.clear()
+                        }}
+                        onChange={value => {
+                            this.onChange(value)
+                        }}
 
-                />
-                <FlatList
-                    data={this.state.list}
-                    renderItem={this.renderMovie}
-                    style={styles.list}
-                    keyExtractor={item => item.id}
-                    ListFooterComponent={this._renderFooter.bind(this)}
-                    onEndReached={this._onEndReached.bind(this)}
-                    onEndReachedThreshold={1}
-                    ItemSeparatorComponent={this._separator}
-                    // getItemLayout={(data, index) => ( {length: 44, offset: (44 + 1) * index, index} )}
-                    // //决定当距离内容最底部还有多远时触发onEndReached回调。
-                    // //注意此参数是一个比值而非像素单位。比如，0.5表示距离内容最底部的距离为当前列表可见长度的一半时触发。
-                    // onEndReachedThreshold={0.1}
-                    // //当列表被滚动到距离内容最底部不足onEndReachedThreshold的距离时调用
-                    // onEndReached={({distanceFromEnd}) => (
-                    //     // console.log('dasd   onEndReached')
-                    //     setTimeout(() => {
-                    //         this.setState({
-                    //             showPage: true,
-                    //         });
-                    //     })
-                    // )}
-                />
-                <View style={{padding: 12,backgroundColor: '#fff'}}></View>
-            </Provider>
+                    />
+                    <FlatList
+                        data={this.state.list}
+                        renderItem={this.renderMovie}
+                        style={styles.list}
+                        keyExtractor={(item, index) => index.toString()}
+                        ListFooterComponent={this._renderFooter.bind(this)}
+                        onEndReached={this._onEndReached.bind(this)}
+                        onEndReachedThreshold={1}
+                        ItemSeparatorComponent={this._separator}
+                        // getItemLayout={(data, index) => ( {length: 44, offset: (44 + 1) * index, index} )}
+                        // //决定当距离内容最底部还有多远时触发onEndReached回调。
+                        // //注意此参数是一个比值而非像素单位。比如，0.5表示距离内容最底部的距离为当前列表可见长度的一半时触发。
+                        // onEndReachedThreshold={0.1}
+                        // //当列表被滚动到距离内容最底部不足onEndReachedThreshold的距离时调用
+                        // onEndReached={({distanceFromEnd}) => (
+                        //     // console.log('dasd   onEndReached')
+                        //     setTimeout(() => {
+                        //         this.setState({
+                        //             showPage: true,
+                        //         });
+                        //     })
+                        // )}
+                    />
+                    <View style={{padding: 12,backgroundColor: '#fff'}}></View>
+                </Provider>
+            </SafeAreaView>
         );
     }
 
@@ -249,7 +251,7 @@ export default class SampleAppMovies extends Component {
         let id = item.id
         let man = {uri: 'https://images.ufutx.com/201910/21/a92b5d29dedb9932568f97fcdff865bc.png'};
         let woman = {uri: 'https://images.ufutx.com/201910/21/40b26d71cf2af9b1be0f874605c6ef2f.png'};
-        let iconText = item.profile_courtship.sex === 1 ?
+        let iconText = item.profile_courtship.sex == 1 ?
             <Image source={man} style={styles.iconStyle}/> :
             <Image source={woman} style={styles.iconStyle}/>;
 
@@ -259,11 +261,11 @@ export default class SampleAppMovies extends Component {
                     <View style={styles.container}>
                         <Image
                             source={{ uri: item.photo }}
-                            style={[styles.thumbnail,{width: width*.92, height: width*.9}]}
+                            style={[{width: width*.92, height: width*.9}]}
                         />
                     </View>
                     <View style={styles.containerText}>
-                        <View style={{flexDirection: "row", justifyContent: "flex-start",}}>
+                        <View style={{flexDirection: "row", justifyContent: "flex-start",alignItems: 'center', flex: 1,}}>
                             <Text style={{marginLeft: 8,}}>{item.name}</Text>
                             {iconText}
                         </View>
@@ -271,10 +273,10 @@ export default class SampleAppMovies extends Component {
                     </View>
                     <View style={[styles.containerText,{marginTop: -8}]}>
                         <Text style={{marginLeft: 8,color: '#97979f',fontSize: 12}}>
-                            {item.profile_courtship.age+'岁'} {item.profile_courtship.stature+'岁'} {item.industry}/{item.industry_sub}
+                            {item.age} {item.profile_courtship.stature+'cm'} {item.industry}/{item.industry_sub}
                         </Text>
                     </View>
-                    <View style={[styles.dotStyle,{width: width}]}></View>
+                    {/*<View style={[styles.dotStyle,{width: width}]}></View>*/}
                 </View>
             </TouchableOpacity>
         );
@@ -307,7 +309,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#f6f6f6'
     },
     list: {
-        backgroundColor: "#fff"
+        backgroundColor: "#fff",
+        borderColor: '#fff'
     },
     title: {
         fontSize: 15,
