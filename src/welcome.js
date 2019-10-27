@@ -4,22 +4,24 @@ import {Actions} from "react-native-router-flux";
 import {fetchRequest} from '../config/FetchUtils';
 import {Toast, Provider} from '@ant-design/react-native';
 import DeviceStorage from '../config/DeviceStorage';
+import AsyncStorage from "@react-native-community/async-storage";
 
 
 export default class Bananas extends Component {
     getLoginState() {
         Toast.loading('正在检测登录状态', .6);
-
-        DeviceStorage.get('token').then((res) => {
-            console.log(res)
-            if (res == null || res == '') {
-                setTimeout(() => {
-                    Actions.login()
-                }, 800)
-            } else {
-                setTimeout(() => {
-                    Actions.home()
-                }, 800)
+        AsyncStorage.getItem('token', function (error, result) {
+            console.log(error,result)
+            if (!error) {
+                if (result == null || result == '') {
+                    setTimeout(() => {
+                        Actions.login()
+                    }, 800)
+                } else {
+                    setTimeout(() => {
+                        Actions.home()
+                    }, 800)
+                }
             }
         })
     }

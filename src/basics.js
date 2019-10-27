@@ -6,6 +6,7 @@ import {Button, InputItem, List, Toast, Provider} from '@ant-design/react-native
 import DeviceStorage from '../config/DeviceStorage';
 import Pickers from '../config/Picker'
 import DatePicker from 'react-native-datepicker'
+import AsyncStorage from "@react-native-community/async-storage";
 export default class login extends Component {
     constructor(props) { // 初始化数据
         super(props);
@@ -62,6 +63,23 @@ export default class login extends Component {
             });
         })
     }
+    getUser() {
+        fetchRequest('official/app/user/profile', 'GET')
+            .then(res => {
+                let {name,profile_courtship} = res.data
+                console.log(profile_courtship)
+                if (profile_courtship) {
+                    this.setState({
+                        name: name,
+                        sex: profile_courtship.sex == 1?'男':'女',
+                        belief: profile_courtship.belief,
+                        datetime: profile_courtship.birthday,
+                    });
+                }
+            }).catch(err => {
+            console.log(`异常: ${err}`);
+        })
+    }
 
     componentWillMount() { // 即将要渲染虚拟DOM，在render函数前，只执行一次
         // console.log('componentWillMount...')
@@ -70,6 +88,10 @@ export default class login extends Component {
     //已经加载虚拟DOM，在render之后，只执行一次，可在此完成异步网络请求或集成其他JavaScript库
     componentDidMount() {
         // console.log('componentDidMount...')
+        AsyncStorage.getItem('token', function (error, result) {
+            console.log(error,result)
+        })
+        this.getUser()
     }
 
     render() {

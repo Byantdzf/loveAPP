@@ -3,14 +3,16 @@ import {Image, Text, View, TouchableOpacity, StyleSheet, Dimensions } from 'reac
 import {Actions} from "react-native-router-flux";
 import {fetchRequest} from '../config/FetchUtils';
 import {Button, InputItem, List, Toast, Provider} from '@ant-design/react-native';
-import DeviceStorage from '../config/DeviceStorage';
+// import DeviceStorage from '../config/DeviceStorage';
+import AsyncStorage from "@react-native-community/async-storage";
+
 export default class login extends Component {
     constructor(props) { // 初始化数据
         super(props);
         this.state = {
             text: '获取验证码',
-            mobile: '',
-            code: '',
+            mobile: '15707534403',
+            code: '999999999',
             timer: '',
             time: 60,
             codeActive: true,
@@ -83,9 +85,16 @@ export default class login extends Component {
                     return
                 } else {
                     Toast.success('登录成功');
-                    DeviceStorage.save("token", res.data.token);
-                    DeviceStorage.save("user", res.data.user);
-                    Actions.basics()
+                    let {token} = res.data
+                    AsyncStorage.setItem('token', token, function (error) {
+                        if (error) {
+                            console.log('存储失败');
+                        } else {
+                            Actions.basics()
+                        }
+                    })
+                    // DeviceStorage.save("token", res.data.token);
+                    // DeviceStorage.save("user", res.data.user);
                 }
             }).catch(err => {
             console.log(`异常: ${err}`);
@@ -99,18 +108,18 @@ export default class login extends Component {
     //已经加载虚拟DOM，在render之后，只执行一次，可在此完成异步网络请求或集成其他JavaScript库
     componentDidMount() {
         // console.log('componentDidMount...')
-        DeviceStorage.get('token').then((res) => {
-            console.log(res)
-            // if (res == null || res == '') {
-            //     setTimeout(() => {
-            //         Actions.login()
-            //     }, 800)
-            // } else {
-            //     setTimeout(() => {
-            //         Actions.home()
-            //     }, 800)
-            // }
-        })
+        // DeviceStorage.get('token').then((res) => {
+        //     console.log(res)
+        //     // if (res == null || res == '') {
+        //     //     setTimeout(() => {
+        //     //         Actions.login()
+        //     //     }, 800)
+        //     // } else {
+        //     //     setTimeout(() => {
+        //     //         Actions.home()
+        //     //     }, 800)
+        //     // }
+        // })
     }
 
     render() {

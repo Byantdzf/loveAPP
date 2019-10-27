@@ -1,6 +1,7 @@
 import React from "react";
 import DeviceStorage from '../config/DeviceStorage';
 import {Actions} from "react-native-router-flux";
+import AsyncStorage from "@react-native-community/async-storage";
 
 /**
  * 让fetch也可以timeout
@@ -35,59 +36,125 @@ function timeout_fetch(fetch_promise, timeout = 10000) {
 
 
 let common_url = 'https://love.ufutx.com/api/';  //服务器地址
+// DeviceStorage.get('token').then((res) => {
+//     if (res == null || res == '') {
+//         // setTimeout(() => {
+//         //     Actions.login()
+//         // }, 800)
+//     } else {
+//         token = res
+//         console.log(token)
+//     }
+// })
 let token = '';
-DeviceStorage.get('token').then((res) => {
-    if (res == null || res == '') {
-        // setTimeout(() => {
-        //     Actions.login()
-        // }, 800)
-    } else {
-        token = res
-    }
-})
+function getToken (){
+    AsyncStorage.getItem('token', function (error, result) {
+        console.log(error, result + '哈哈啊哈哈');
+        if (!error) {
+            token = result === null ? '数据已经删除，现在取的是空值' : result
+        }
+    })
+}
 const fetchRequest = (url, method, params = '') =>{
-    let header = {
-        "Content-Type": "application/json;charset=UTF-8",
-        "Authorization": 'Bearer ' + token  //用户登陆后返回的token，某些涉及用户数据的接口需要在header中加上token
-    };
-    console.log(header)
-    console.log('request url:', url, params);  //打印请求参数
-    if (params == '') {   //如果网络请求中没带有参数
-        return new Promise(function (resolve, reject) {
-            timeout_fetch(fetch(common_url + url, {
-                method: method,
-                headers: header
-            })).then((response) => response.json())
-                .then((responseData) => {
-                    console.log('res:', url, responseData);  //网络请求成功返回的数据
-                    if (responseData.code == 2) {
-                        return  Actions.login()
+    return new Promise(function (resolve, reject) {
+        AsyncStorage.getItem('token', function (error, result) {
+            console.log(error, result + '哈哈啊哈哈');
+            token = result
+            if (!error && result != null) {
+                console.log(token+'token')
+                let header = {
+                    "Content-Type": "application/json;charset=UTF-8",
+                    "Authorization": 'Bearer ' + token  //用户登陆后返回的token，某些涉及用户数据的接口需要在header中加上token
+                };
+                console.log(header)
+                console.log('request url:', url, params);  //打印请求参数
+                let config = {
+                    method: method,
+                    headers: header,
+                    body: JSON.stringify(params)   //body参数，通常需要转换成字符串后服务器才能解析
+                }
+                if (params == ''){
+                    config = {
+                        method: method,
+                        headers: header
                     }
-                    resolve(responseData);
-                })
-                .catch((err) => {
-                    console.log('err:', url, err);     //网络请求失败返回的数据
-                    reject(err);
-                    alert('网络异常！请重试...')
-                });
-        });
-    } else {   //如果网络请求中没有参数
-        return new Promise(function (resolve, reject) {
-            timeout_fetch(fetch(common_url + url, {
-                method: method,
-                headers: header,
-                body: JSON.stringify(params)   //body参数，通常需要转换成字符串后服务器才能解析
-            })).then((response) => response.json())
-                .then((responseData) => {
-                    console.log('res:', url, responseData);   //网络请求成功返回的数据
-                    resolve(responseData);
-                })
-                .catch((err) => {
-                    console.log('err:', url, err);   //网络请求失败返回的数据
-                    reject(err);
-                });
-        });
-    }
+                }
+                timeout_fetch(fetch(common_url + url, config)).then((response) => response.json())
+                    .then((responseData) => {
+                        console.log('res:', url, responseData);   //网络请求成功返回的数据
+                        resolve(responseData);
+                    })
+                    .catch((err) => {
+                        console.log('err:', url, err);   //网络请求失败返回的数据
+                        reject(err);
+                    });
+            }else {
+                console.log(token+'token')
+                let header = {
+                    "Content-Type": "application/json;charset=UTF-8",
+                    "Authorization": 'Bearer ' + token  //用户登陆后返回的token，某些涉及用户数据的接口需要在header中加上token
+                };
+                console.log(header)
+                console.log('request url:', url, params);  //打印请求参数
+                let config = {
+                    method: method,
+                    headers: header,
+                    body: JSON.stringify(params)   //body参数，通常需要转换成字符串后服务器才能解析
+                }
+                if (params == ''){
+                    config = {
+                        method: method,
+                        headers: header
+                    }
+                }
+                timeout_fetch(fetch(common_url + url, config)).then((response) => response.json())
+                    .then((responseData) => {
+                        console.log('res:', url, responseData);   //网络请求成功返回的数据
+                        resolve(responseData);
+                    })
+                    .catch((err) => {
+                        console.log('err:', url, err);   //网络请求失败返回的数据
+                        reject(err);
+                    });
+            }
+        })
+    });
+    // if (params == '') {   //如果网络请求中没带有参数
+    //     return new Promise(function (resolve, reject) {
+    //         timeout_fetch(fetch(common_url + url, {
+    //             method: method,
+    //             headers: header
+    //         })).then((response) => response.json())
+    //             .then((responseData) => {
+    //                 console.log('res:', url, responseData);  //网络请求成功返回的数据
+    //                 if (responseData.code == 2) {
+    //                     return  Actions.login()
+    //                 }
+    //                 resolve(responseData);
+    //             })
+    //             .catch((err) => {
+    //                 console.log('err:', url, err);     //网络请求失败返回的数据
+    //                 reject(err);
+    //                 alert('网络异常！请重试...')
+    //             });
+    //     });
+    // } else {   //如果网络请求中有参数
+    //     return new Promise(function (resolve, reject) {
+    //         timeout_fetch(fetch(common_url + url, {
+    //             method: method,
+    //             headers: header,
+    //             body: JSON.stringify(params)   //body参数，通常需要转换成字符串后服务器才能解析
+    //         })).then((response) => response.json())
+    //             .then((responseData) => {
+    //                 console.log('res:', url, responseData);   //网络请求成功返回的数据
+    //                 resolve(responseData);
+    //             })
+    //             .catch((err) => {
+    //                 console.log('err:', url, err);   //网络请求失败返回的数据
+    //                 reject(err);
+    //             });
+    //     });
+    // }
 }
 // module.exports = fetchRequest;
 export {fetchRequest}
