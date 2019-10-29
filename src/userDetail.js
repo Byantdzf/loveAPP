@@ -60,7 +60,16 @@ export default class SampleAppMovies extends Component {
         if (value === null) {
             return console.log('没有内容')
         }
-        Toast.success('举报成功，平台将核实信息！')
+        let data = {
+            type: '其他',
+            content: value
+        }
+        fetchRequest(`official/app/complaint/users/`+ this.props.id, 'post', data)
+            .then(res => {
+                Toast.success('举报成功，平台将核实信息！')
+            }).catch(err => {
+            console.log(`异常: ${err}`);
+        })
         console.log(value)
     }
     shieldUser = () => {
