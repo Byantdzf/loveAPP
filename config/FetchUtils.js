@@ -35,7 +35,8 @@ function timeout_fetch(fetch_promise, timeout = 10000) {
 }
 
 
-let common_url = 'https://love.ufutx.com/api/';  //服务器地址
+// let common_url = 'https://love.ufutx.com/api/';  //服务器地址
+let common_url = 'http://love.hankin.ufutx.cn/api/';  //本地服务器地址
 // DeviceStorage.get('token').then((res) => {
 //     if (res == null || res == '') {
 //         // setTimeout(() => {
@@ -58,7 +59,6 @@ function getToken (){
 const fetchRequest = (url, method, params = '') =>{
     return new Promise(function (resolve, reject) {
         AsyncStorage.getItem('token', function (error, result) {
-            console.log(error, result + '哈哈啊哈哈');
             token = result
             if (!error && result != null) {
                 console.log(token+'token')

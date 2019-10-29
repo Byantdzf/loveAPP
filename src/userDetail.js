@@ -3,11 +3,11 @@ import React, { Component } from "react";
 
 import { Image, FlatList, StyleSheet, Text, View, Dimensions, TouchableOpacity, ScrollView, ActivityIndicator, Linking} from "react-native";
 import {fetchRequest} from '../config/FetchUtils';
-import {Toast, Provider, Carousel, Modal} from "@ant-design/react-native";
+import {Toast, Provider, Carousel, Modal, List} from "@ant-design/react-native";
 import {Actions} from "react-native-router-flux";
 import ActionButton from 'react-native-action-button';
-const REQUEST_URL =
-    "https://raw.githubusercontent.com/facebook/react-native/0.51-stable/docs/MoviesExample.json";
+import Pickers from '../config/Picker'
+
 
 export default class SampleAppMovies extends Component {
     constructor(props) {
@@ -17,12 +17,65 @@ export default class SampleAppMovies extends Component {
             user: {},
             page: 1,
             keyword: '',
-            loaded: false
+            loaded: false,
+            visible: false,
         };
         // 在ES6中，如果在自定义的函数里使用了this关键字，则需要对其进行“绑定”操作，否则this的指向会变为空
         // 像下面这行代码一样，在constructor中使用bind是其中一种做法（还有一些其他做法，如使用箭头函数等）
         this.fetchData = this.fetchData.bind(this);
+        this.onClose = () => {
+            this.setState({
+                visible: false
+            });
+        }
+        this.report = () => { // 举报
+            this.setState({
+                visible: false
+            });
+            Modal.prompt(
+                '温馨提示',
+                '请认真填写举报内容，方便平台审核！',
+                value => this.reportFn(`${value}`),
+                'default',
+                null,
+                ['举报内容']
+            );
+        }
+        this.shieldFn = () => { // 拉黑
+            this.setState({
+                visible: false
+            });
+            Modal.alert('温馨提示', '是否确认屏蔽该用户？', [
+                {
+                    text: '取消',
+                    onPress: () => console.log('cancel'),
+                    style: 'cancel',
+                },
+                { text: '确认', onPress: () => this.shieldUser()}
+            ]);
+        }
     }
+
+    reportFn = (value) => {
+        if (value === null) {
+            return console.log('没有内容')
+        }
+        Toast.success('举报成功，平台将核实信息！')
+        console.log(value)
+    }
+    shieldUser = () => {
+        console.log('de')
+        fetchRequest(`official/app/black/users/`+ this.props.id, 'post')
+            .then(res => {
+                Toast.info('成功屏蔽，即将返回上一页')
+                setTimeout(()=>{
+                    Actions.pop()
+                }, .8)
+            }).catch(err => {
+            console.log(`异常: ${err}`);
+        })
+    }
+
     call = phone => {
         const url = `tel:${phone}`;
         Linking.canOpenURL(url)
@@ -70,6 +123,14 @@ export default class SampleAppMovies extends Component {
         console.log('horizontal change to', index);
     }
 
+    selectSex() {
+        Pickers.show(['男', '女'], this.state.sex, (value) => {
+            console.log(value)
+            this.setState({
+                sex: value.join(','),
+            });
+        })
+    }
     render() {
         if (!this.state.loaded) {
             return this.renderLoadingView();
@@ -142,16 +203,14 @@ export default class SampleAppMovies extends Component {
                         </View>
                         <Text style={{marginRight: 4,marginTop: 4,color: '#97979f',fontSize: 12}}>{user.login_time_str}活跃</Text>
                     </View>
-                    <View style={[styles.containerText,{marginTop: -6}]}>
+                    <View style={[styles.containerText,{marginTop: 0}]}>
                         <Text style={{marginLeft: 8,color: '#97979f',fontSize: 12}}>
                             {user.age} {user.profile_courtship.stature+'cm'} {user.industry}/{user.industry_sub}
                         </Text>
+                        <TouchableOpacity onPress={() => this.setState({ visible: true })}>
+                            <Image source={{uri: 'https://images.ufutx.com/201910/29/50d3b52c4902ca02755a596cbcefb8d7.png'}} style={[{width: 22, height: 12,marginRight: 6,marginTop: 2,}]}/>
+                        </TouchableOpacity>
                     </View>
-                    {/*原始ui*/}
-                    {/*<View style={[styles.containerText,{marginTop: 12,justifyContent: "flex-start",flexDirection: 'column'}]}>*/}
-                        {/*<Text style={{marginLeft: 8,fontSize: 16}}>择偶意向</Text>*/}
-                        {/*<View style={{width: 32,height: 6,backgroundColor: '#EFA6B7',marginLeft: 9,marginTop: -8,opacity: .8}}></View>*/}
-                    {/*</View>*/}
                     <View style={[styles.dotStyle,{width: width}]}></View>
                     <View style={[styles.containerText,{marginTop: 12}]}>
                         <Text style={{marginLeft: 8,fontSize: 16}}>个人资料</Text>
@@ -180,10 +239,6 @@ export default class SampleAppMovies extends Component {
                     {this.userApproved()}
                     <View style={{height: 100}}>{/*占位*/}</View>
                 </ScrollView>
-                {/*<ActionButton*/}
-                    {/*buttonColor="rgba(231,76,60,1)"*/}
-                    {/*onPress={() => { console.log("hi")}}*/}
-                {/*/>*/}
                 <ActionButton buttonColor="#D92553">
                     <ActionButton.Item buttonColor='rgba(231,76,60,0)' title="主页" onPress={() => Actions.home()}>
                         <Image
@@ -197,13 +252,19 @@ export default class SampleAppMovies extends Component {
                             style={[styles.thumbnail,{width: 80, height: 80,marginTop: 12}]}
                         />
                     </ActionButton.Item>
-                    {/*<ActionButton.Item buttonColor='#3498db' title="Notifications" onPress={() => {}}>*/}
-                        {/*<Icon name="md-notifications-off" style={styles.actionButtonIcon} />*/}
-                    {/*</ActionButton.Item>*/}
-                    {/*<ActionButton.Item buttonColor='#1abc9c' title="All Tasks" onPress={() => {}}>*/}
-                        {/*<Icon name="md-done-all" style={styles.actionButtonIcon} />*/}
-                    {/*</ActionButton.Item>*/}
                 </ActionButton>
+                <Modal
+                    popup
+                    visible={this.state.visible}
+                    animationType="slide-up"
+                    onClose={this.onClose}
+                >
+                    <View style={{ }}>
+                        <Text style={[styles.ModalItem]} onPress={this.report}>举报</Text>
+                        <Text style={[styles.ModalItem, {borderBottomColor: '#f6f6f6', borderBottomWidth: 6,}]} onPress={this.shieldFn}>拉黑</Text>
+                        <Text style={[styles.ModalItem, {borderBottomWidth: 0}]} onPress={this.onClose}>取消</Text>
+                    </View>
+                </Modal>
             </View>
         );
     }
@@ -284,7 +345,13 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "center",
         alignItems: "center",
-        // backgroundColor: "pink"
+    },
+    ModalItem: {
+        textAlign: 'center',
+        borderBottomColor: '#f6f6f6',
+        borderBottomWidth: 1,
+        padding: 12,
+        fontSize: 18,
     },
     containerText: {
         margin: 10,

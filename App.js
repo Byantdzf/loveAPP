@@ -28,6 +28,7 @@ import basics from './src/basics';
 import GrayScreen from './src/GrayScreen ';
 import home from "./src/home";
 import userDetail from "./src/userDetail";
+import protocol from "./src/protocol";
 
 // const App = () => {
 //     return (
@@ -61,13 +62,18 @@ export default class App extends Component<Props> {
                            component={welcome}
                            title="启动页"
                            hideNavBar={true}
-                           initial
+                           // initial
                     />
                     <Scene key="login"
                            component={login}
                            title="登录"
                            hideNavBar={true}
-                           // initial
+                           initial
+                    />
+                    <Scene
+                        key="protocol"
+                        component={protocol}
+                        title="服务协议"
                     />
                     <Scene key="basics"
                            component={basics}
@@ -84,6 +90,7 @@ export default class App extends Component<Props> {
                            title="用户详情"
                            hideNavBar={true}
                     />
+
 
                     <Scene
                         key="gray"

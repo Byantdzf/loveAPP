@@ -25,12 +25,20 @@ export default class SampleAppMovies extends Component {
             error: false,
             errorInfo: "",
             dataArray: [],
+            loading: true,
             showFoot:0, // 控制foot， 0：隐藏footer  1：已加载完成,没有更多数据   2 ：显示加载中
             isRefreshing:false,//下拉控制
         };
         // 在ES6中，如果在自定义的函数里使用了this关键字，则需要对其进行“绑定”操作，否则this的指向会变为空
         // 像下面这行代码一样，在constructor中使用bind是其中一种做法（还有一些其他做法，如使用箭头函数等）
         this.fetchData = this.fetchData.bind(this);
+        this.refreshData = () => {
+            this.setState({//复原数据
+                list: []
+            })
+            pageNo = 1
+            this.fetchData(pageNo);
+        }
     }
 
     componentDidMount() {
@@ -39,7 +47,10 @@ export default class SampleAppMovies extends Component {
     }
 
     fetchData(pageNo) {
-        Toast.loading('加载中...', .6);
+        Toast.loading('加载中...', .4);
+        this.setState({
+            loading: !this.state.loading
+        });
         fetchRequest(`official/app/home?page=` + pageNo + `&keyword=` + this.state.keyword, 'GET')
             .then(res => {
                 let foot = 0;
@@ -60,6 +71,11 @@ export default class SampleAppMovies extends Component {
 
                 //     page: this.state.page+1
                 // });
+                setTimeout(()=>{
+                    this.setState({
+                        loading: !this.state.loading
+                    });
+                },.4)
                 console.log(this.state.list)
             }).catch(err => {
             console.log(`异常: ${err}`);
@@ -94,12 +110,8 @@ export default class SampleAppMovies extends Component {
         // if (!this.state.loaded) {
         //     return this.renderLoadingView();
         // }
-        // let showPage = this.state.showPage ?
-        //     <View style={[styles.dotStyle, {width: width}]}>
-        //         <Text>加载更多</Text>
-        //     </View>
-        //     : null;
-
+        let loading = this.state.loading ? <Image source={{uri: 'https://images.ufutx.com/201910/29/69c850040d52f8182741f5aaed7f155e.png'}} style={styles.refreshIcon}/>
+            : <ActivityIndicator size="large" color="#D92553" />;
         return (
             <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
                 <Provider>
@@ -142,6 +154,13 @@ export default class SampleAppMovies extends Component {
                         // )}
                     />
                     <View style={{padding: 12,backgroundColor: '#fff'}}></View>
+                    {/*<TouchableOpacity onPress={() => {this.fetchData()}} style={{ zIndex: 999999}}>*/}
+                        <View style={styles.refresh} onTouchEnd={this.refreshData}>
+                            <View style={styles.refreshLoad}>
+                                {loading}
+                            </View>
+                        </View>
+                    {/*</TouchableOpacity>*/}
                 </Provider>
             </SafeAreaView>
         );
@@ -292,6 +311,32 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         // backgroundColor: "pink"
+    },
+    refresh: {
+        // backgroundColor: 'pink',
+        justifyContent: "center",
+        alignItems: "center",
+        position: 'absolute',
+        bottom: 42,
+        right: 22,
+    },
+    refreshLoad: {
+        width: 50,
+        height: 50,
+        backgroundColor: '#fff',
+        borderRadius: 50,
+        shadowColor: '#D92553',
+        shadowOffset: {width: 0,height: 0},
+        shadowOpacity: 22,
+        shadowRadius: 22,
+        flex: 1,
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    refreshIcon: {
+        width: 32,
+        height: 32,
     },
     containerText: {
         margin: 12,
