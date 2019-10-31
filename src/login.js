@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Image, Text, View, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import {Image, Text, View, TouchableOpacity, StyleSheet, Dimensions, ScrollView } from 'react-native';
 import {Actions} from "react-native-router-flux";
 import {fetchRequest} from '../config/FetchUtils';
 import {Button, InputItem, List, Toast, Provider, Modal} from '@ant-design/react-native';
@@ -145,56 +145,60 @@ export default class login extends Component {
             <Provider>
                 <View style={{backgroundColor: '#ffffff', flex: 1}}>
                     <Image source={backPic} style={styles.backPic}/>
-                    <List style={styles.box}>
-                        <InputItem
-                            clear
-                            type="phone"
-                            styles={{color: '#fff'}}
-                            value={this.state.mobile}
-                            onChange={value => {
-                                this.setState({
-                                    mobile: value,
-                                });
-                            }}
-                            placeholder="手机号"
-                        >
-                            <Image source={phoneIcon} style={styles.icon}/>
-                        </InputItem>
-                    </List>
-                    <List style={styles.box}>
-                        <InputItem
-                            type="number"
-                            maxLength = {9}
-                            value={this.state.code}
-                            styles={styles.codeInput}
-                            onChange={value => {
-                                this.setState({
-                                    code: value,
-                                });
-                            }}
-                            ref={el => (this.inputRef = el)}
-                            placeholder="验证码"
-                            extra={<Text style={{color: this.state.codeActive == true ? '#D92553' : '#bfbfbf'}}
-                                         onPress={() => {
-                                             this.getCode()
-                                         }}>{this.state.codeActive == true ? this.state.text : (this.state.time + this.state.text)}</Text>}
-                        >
-                            <Image source={codeIcon} style={styles.icon}/>
-                        </InputItem>
-                    </List>
-                    <View style={[styles.box,{flexDirection: 'row',alignContent: 'flex-end'}]}>
-                        <TouchableOpacity onPress={this.selectBtn}>
-                            <Image source={selectIcon} style={{width: 20,height: 20,}}/>
-                        </TouchableOpacity>
-                        <Text style={styles.privacy} onPress={this.selectBtn}>我已阅读并同意</Text>
-                        <Text style={[styles.privacy,{color: '#d92553'}]} onPress={()=>{Actions.protocol()}}>《用户服务协议》</Text>
-                    </View>
-                    <View style={{height: 42}} ></View>
-                    <TouchableOpacity onPress={() => {this.login()}}>
-                        <View style={styles.btnStyle}>
-                            <Text style={styles.textStyle}>点击登录</Text>
+                    <ScrollView                           // or ListView
+                        keyboardDismissMode="on-drag"
+                        keyboardShouldPersistTaps={true}>
+                        <List style={styles.box}>
+                            <InputItem
+                                clear
+                                type="phone"
+                                styles={{color: '#fff'}}
+                                value={this.state.mobile}
+                                onChange={value => {
+                                    this.setState({
+                                        mobile: value,
+                                    });
+                                }}
+                                placeholder="手机号"
+                            >
+                                <Image source={phoneIcon} style={styles.icon}/>
+                            </InputItem>
+                        </List>
+                        <List style={styles.box}>
+                            <InputItem
+                                type="number"
+                                maxLength = {9}
+                                value={this.state.code}
+                                styles={styles.codeInput}
+                                onChange={value => {
+                                    this.setState({
+                                        code: value,
+                                    });
+                                }}
+                                ref={el => (this.inputRef = el)}
+                                placeholder="验证码"
+                                extra={<Text style={{color: this.state.codeActive == true ? '#D92553' : '#bfbfbf'}}
+                                             onPress={() => {
+                                                 this.getCode()
+                                             }}>{this.state.codeActive == true ? this.state.text : (this.state.time + this.state.text)}</Text>}
+                            >
+                                <Image source={codeIcon} style={styles.icon}/>
+                            </InputItem>
+                        </List>
+                        <View style={[styles.box,{flexDirection: 'row',alignContent: 'flex-end'}]}>
+                            <TouchableOpacity onPress={this.selectBtn}>
+                                <Image source={selectIcon} style={{width: 20,height: 20,}}/>
+                            </TouchableOpacity>
+                            <Text style={styles.privacy} onPress={this.selectBtn}>我已阅读并同意</Text>
+                            <Text style={[styles.privacy,{color: '#d92553'}]} onPress={()=>{Actions.protocol()}}>《用户服务协议》</Text>
                         </View>
-                    </TouchableOpacity>
+                        <View style={{height: 42}} ></View>
+                        <TouchableOpacity onPress={() => {this.login()}}>
+                            <View style={styles.btnStyle}>
+                                <Text style={styles.textStyle}>点击登录</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </ScrollView>
                     <Modal
                         title="温馨提示"
                         transparent
