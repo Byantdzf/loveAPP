@@ -147,7 +147,7 @@ export default class login extends Component {
                     <Image source={backPic} style={styles.backPic}/>
                     <ScrollView                           // or ListView
                         keyboardDismissMode="on-drag"
-                        keyboardShouldPersistTaps={true}>
+                        keyboardShouldPersistTaps='always'>
                         <List style={styles.box}>
                             <InputItem
                                 clear
