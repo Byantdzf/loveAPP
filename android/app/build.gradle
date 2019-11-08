@@ -131,6 +131,7 @@ android {
         applicationId "com.loveapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
+        vectorDrawables.useSupportLibrary = true
         versionCode 1
         versionName "0.1"
     }

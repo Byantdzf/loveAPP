@@ -60,7 +60,7 @@ const fetchRequest = (url, method, params = '') =>{
         AsyncStorage.getItem('token', function (error, result) {
             token = result
             if (!error && result != null) { // 有token
-                console.log(token+'token')
+                // console.log(token+'token')
                 let header = {
                     "Content-Type": "application/json;charset=UTF-8",
                     "Authorization": 'Bearer ' + token  //用户登陆后返回的token，某些涉及用户数据的接口需要在header中加上token
@@ -78,10 +78,7 @@ const fetchRequest = (url, method, params = '') =>{
                         headers: header
                     }
                 }
-                timeout_fetch(fetch(common_url + url, config)).then((response) => {
-                    console.log(response)
-                    return response.json()
-                })
+                timeout_fetch(fetch(common_url + url, config)).then((response) => response.json())
                     .then((responseData) => {
                         console.log('res:', url, responseData);   //网络请求成功返回的数据
                         resolve(responseData);
@@ -91,34 +88,34 @@ const fetchRequest = (url, method, params = '') =>{
                         reject(err);
                     });
             }else { // 无token
-                console.log(token+'token')
-
-
-
+                // console.log(token+'token')
                 let header = {
                     "Content-Type": "application/json;charset=UTF-8",
                     "Authorization": 'Bearer ' + token  //用户登陆后返回的token，某些涉及用户数据的接口需要在header中加上token
                 };
                 console.log(header)
                 console.log('request url:', url, params);  //打印请求参数
-                let config = {
-                    method: method,
-                    headers: header,
-                    body: JSON.stringify(params)   //body参数，通常需要转换成字符串后服务器才能解析
-                }
+                let config = {}
                 if (params == '') {
                     config = {
                         method: method,
                         headers: header
                     }
+                } else {
+                    config = {
+                        method: method,
+                        headers: header,
+                        body: JSON.stringify(params)   //body参数，通常需要转换成字符串后服务器才能解析
+                    }
                 }
-                timeout_fetch(fetch(common_url + url, config)).then((response) => {
-                    console.log(response,'1222/')
-                    response.json()
-                })
-                    .then((responseData) => {
-                        console.log('res:', url, responseData);   //网络请求成功返回的数据
-                        resolve(responseData);
+                timeout_fetch(fetch(common_url + url, config)).then((response) => response.json())
+                    .then((res) => {
+                        console.log('res:', url, res);   //网络请求成功返回的数据
+                        if (res.code == 2) {
+                            Actions.login()
+                            return
+                        }
+                        resolve(res);
                     })
                     .catch((err) => {
                         console.log('err:', url, err);   //网络请求失败返回的数据

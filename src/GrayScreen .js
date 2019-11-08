@@ -5,8 +5,8 @@ import {
     View
 } from 'react-native';
 import {Actions} from "react-native-router-flux";
-
 const ScarletScreen = () => {
+
     return (
         <View style={styles.container}>
             <Text style={styles.welcome} onPress={()=>Actions.login()}>

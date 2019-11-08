@@ -29,6 +29,7 @@ import GrayScreen from './src/GrayScreen ';
 import home from "./src/home";
 import userDetail from "./src/userDetail";
 import protocol from "./src/protocol";
+import test from "./src/test";
 
 // const App = () => {
 //     return (
@@ -58,6 +59,12 @@ export default class App extends Component<Props> {
             <Router>
                 {/*<Modal>*/}
                 <Scene key="root">
+                    <Scene key="test"
+                           component={test}
+                           title="测试"
+                           hideNavBar={true}
+                        initial
+                    />
                     <Scene key="welcome"
                            component={welcome}
                            title="启动页"
@@ -68,7 +75,7 @@ export default class App extends Component<Props> {
                            component={login}
                            title="登录"
                            hideNavBar={true}
-                           initial
+                           // initial
                     />
                     <Scene
                         key="protocol"
@@ -79,6 +86,7 @@ export default class App extends Component<Props> {
                            component={basics}
                            title="基本资料"
                            hideNavBar={true}
+                           // initial
                     />
                     <Scene key="home"
                            component={home}

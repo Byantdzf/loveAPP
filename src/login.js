@@ -11,13 +11,13 @@ export default class login extends Component {
         super(props);
         this.state = {
             text: '获取验证码',
-            mobile: '',
-            code: '',
+            mobile: '15707534403',
+            code: '999999999',
             timer: '',
             time: 60,
             codeActive: true,
-            visible: true,
-            protocol: false,
+            visible: false,
+            protocol: true,
         }
         this.selectBtn = () => {
             this.setState({

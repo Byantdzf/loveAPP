@@ -1,7 +1,7 @@
 
 import React, { Component } from "react";
 
-import {Image, FlatList, StyleSheet, Text, View, Dimensions, TouchableOpacity, ActivityIndicator, SafeAreaView} from "react-native";
+import {Image, FlatList, StyleSheet, Text, View, Dimensions, TouchableOpacity, ActivityIndicator, SafeAreaView, StatusBar} from "react-native";
 import {fetchRequest} from '../config/FetchUtils';
 import {SearchBar, Toast, Provider} from "@ant-design/react-native";
 import {Actions} from "react-native-router-flux";
@@ -114,6 +114,7 @@ export default class SampleAppMovies extends Component {
             : <ActivityIndicator size="large" color="#D92553" />;
         return (
             <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
+                <StatusBar translucent={false} backgroundColor='#d92553' barStyle="light-content" />
                 <Provider>
                     <SearchBar
                         // defaultValue="初始值"
