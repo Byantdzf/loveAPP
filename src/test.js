@@ -3,7 +3,7 @@
  * https://github.com/facebook/react-native
  * @flow
  */
-
+// 导航栏测试
 import React, { Component } from 'react'
 import {BaseComponent} from '../baseComponent/baseComponent'
 import {
@@ -29,7 +29,7 @@ export default class App extends BaseComponent {
             rightIcon: {
                 name: 'rocket',
                 size: 20,
-                color: '#333'
+                color: 'red'
             }
         }
     }

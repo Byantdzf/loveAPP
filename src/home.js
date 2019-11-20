@@ -1,14 +1,26 @@
+import React, {Component} from "react";
 
-import React, { Component } from "react";
-
-import {Image, FlatList, StyleSheet, Text, View, Dimensions, TouchableOpacity, ActivityIndicator, SafeAreaView, StatusBar} from "react-native";
+import {
+    Image,
+    FlatList,
+    StyleSheet,
+    Text,
+    View,
+    Dimensions,
+    TouchableOpacity,
+    ActivityIndicator,
+    SafeAreaView,
+    StatusBar,
+    TextInput
+} from "react-native";
 import {fetchRequest} from '../config/FetchUtils';
-import {SearchBar, Toast, Provider} from "@ant-design/react-native";
+import {SearchBar, Toast, Provider, Drawer} from "@ant-design/react-native";
 import {Actions} from "react-native-router-flux";
+import CommunalNavBar from './components/communalNavBar';
 
 let pageNo = 1;//当前第几页
-let totalPage=5;//总的页数
-let itemNo=0;//item的个数
+let totalPage = 5;//总的页数
+
 export default class SampleAppMovies extends Component {
     constructor(props) {
         super(props);
@@ -20,14 +32,14 @@ export default class SampleAppMovies extends Component {
             showList: true,
             loaded: false,
             showPage: false,
-            isLoading: true,
-            //网络请求状态
+            isLoading: true, //网络请求状态
             error: false,
             errorInfo: "",
+            visible: false, // 抽屉开不开
             dataArray: [],
             loading: true,
-            showFoot:0, // 控制foot， 0：隐藏footer  1：已加载完成,没有更多数据   2 ：显示加载中
-            isRefreshing:false,//下拉控制
+            showFoot: 0, // 控制foot， 0：隐藏footer  1：已加载完成,没有更多数据   2 ：显示加载中
+            isRefreshing: false,//下拉控制
         };
         // 在ES6中，如果在自定义的函数里使用了this关键字，则需要对其进行“绑定”操作，否则this的指向会变为空
         // 像下面这行代码一样，在constructor中使用bind是其中一种做法（还有一些其他做法，如使用箭头函数等）
@@ -39,6 +51,10 @@ export default class SampleAppMovies extends Component {
             pageNo = 1
             this.fetchData(pageNo);
         }
+        this.onOpenChange = isOpen => {
+            /* tslint:disable: no-console */
+            console.log('是否打开了 Drawer', isOpen.toString());
+        };
     }
 
     componentDidMount() {
@@ -55,7 +71,7 @@ export default class SampleAppMovies extends Component {
             .then(res => {
                 let foot = 0;
                 if (pageNo >= totalPage) {
-                    foot = 1;//listView底部显示没有更多数据了
+                    foot = 1; // listView底部显示没有更多数据了
                 }
                 this.setState({
                     //复制数据源
@@ -65,17 +81,11 @@ export default class SampleAppMovies extends Component {
                     isRefreshing: false,
                     showList: res.data.data.length > 0 ? true : false,
                 });
-                // this.setState({
-                //     list: this.state.list.concat(res.data.data),
-                //     loaded: true,
-
-                //     page: this.state.page+1
-                // });
-                setTimeout(()=>{
+                setTimeout(() => {
                     this.setState({
                         loading: !this.state.loading
                     });
-                },.4)
+                }, .4)
                 console.log(this.state.list)
             }).catch(err => {
             console.log(`异常: ${err}`);
@@ -83,7 +93,6 @@ export default class SampleAppMovies extends Component {
     }
 
     onChange(value) {
-        // console.log(value)
         this.setState({keyword: value});
     }
 
@@ -94,7 +103,7 @@ export default class SampleAppMovies extends Component {
     onSubmit(value) {
         Toast.loading('搜索中...', .6);
         this.setState({
-            list: []
+            list: [],
         });
         pageNo = 1
         setTimeout(() => {
@@ -102,67 +111,91 @@ export default class SampleAppMovies extends Component {
         })
         console.log(value)
     }
-    renderData() {
-        // if (!this.state.showList) {
-        //     return this.renderNoList();
-        // }
 
-        // if (!this.state.loaded) {
-        //     return this.renderLoadingView();
-        // }
-        let loading = this.state.loading ? <Image source={{uri: 'https://images.ufutx.com/201910/29/69c850040d52f8182741f5aaed7f155e.png'}} style={styles.refreshIcon}/>
-            : <ActivityIndicator size="large" color="#D92553" />;
+    // 返回左边按钮
+    renderLeftItem() {
+        return (
+            <TouchableOpacity onPress={() => this.drawer && this.drawer.openDrawer()}>
+                <Image
+                    source={{uri: 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3699703635,816718470&fm=26&gp=0.jpg'}}
+                    style={styles.navbarLeftItemStyle}/>
+            </TouchableOpacity>
+        );
+    }
+
+    // 返回中间按钮
+    renderTitleItem() {
+        return (
+            <TouchableOpacity>
+                <TextInput
+                    value={this.state.keyword}
+                    style={styles.searchStyle}
+                    onChangeText={text => this.onChange(text)}
+                    placeholder="搜索TA..."
+                    onBlur={value => {
+                        this.onSubmit(value)
+                    }}
+                />
+            </TouchableOpacity>
+        );
+    }
+
+    // 返回右边按钮
+    renderRightItem() {
+        return (
+            <TouchableOpacity>
+                <Image source={{uri: 'https://images.ufutx.com/201911/11/33a46981f02bf62c9c47bcfd2d9d9ec2.png'}}
+                       style={styles.navbarRightItemStyle}/>
+            </TouchableOpacity>
+        );
+    }
+
+    renderData() {
+        let loading = this.state.loading ?
+            <Image source={{uri: 'https://images.ufutx.com/201910/29/69c850040d52f8182741f5aaed7f155e.png'}}
+                   style={styles.refreshIcon}/>
+            : <ActivityIndicator size="large" color="#D92553"/>;
         return (
             <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
-                <StatusBar translucent={false} backgroundColor='#d92553' barStyle="light-content" />
-                <Provider>
-                    <SearchBar
-                        // defaultValue="初始值"
-                        placeholder="搜索"
-                        value={this.state.keyword}
-                        onSubmit={value => {
-                            this.onSubmit(value)
-                        }}
-                        onCancel={() => {
-                            this.clear()
-                        }}
-                        onChange={value => {
-                            this.onChange(value)
-                        }}
-
-                    />
-                    <FlatList
-                        data={this.state.list}
-                        renderItem={this.renderMovie}
-                        style={styles.list}
-                        keyExtractor={(item, index) => index.toString()}
-                        ListFooterComponent={this._renderFooter.bind(this)}
-                        onEndReached={this._onEndReached.bind(this)}
-                        onEndReachedThreshold={1}
-                        ItemSeparatorComponent={this._separator}
-                        // getItemLayout={(data, index) => ( {length: 44, offset: (44 + 1) * index, index} )}
-                        // //决定当距离内容最底部还有多远时触发onEndReached回调。
-                        // //注意此参数是一个比值而非像素单位。比如，0.5表示距离内容最底部的距离为当前列表可见长度的一半时触发。
-                        // onEndReachedThreshold={0.1}
-                        // //当列表被滚动到距离内容最底部不足onEndReachedThreshold的距离时调用
-                        // onEndReached={({distanceFromEnd}) => (
-                        //     // console.log('dasd   onEndReached')
-                        //     setTimeout(() => {
-                        //         this.setState({
-                        //             showPage: true,
-                        //         });
-                        //     })
-                        // )}
-                    />
-                    <View style={{padding: 12,backgroundColor: '#fff'}}></View>
-                    {/*<TouchableOpacity onPress={() => {this.fetchData()}} style={{ zIndex: 999999}}>*/}
+                <Drawer
+                    sidebar={this.sidebar()}
+                    position="left"
+                    open={false}
+                    drawerRef={el => (this.drawer = el)}
+                    onOpenChange={this.onOpenChange}
+                    drawerBackgroundColor="#fff"
+                    open={this.state.visible}
+                    drawerWidth={width}
+                >
+                    <View style={styles.containerv}>
+                        <CommunalNavBar
+                            leftItem={() => this.renderLeftItem()}
+                            titleItem={() => this.renderTitleItem()}
+                            rightItem={() => this.renderRightItem()}
+                        />
+                    </View>
+                    <Provider>
+                        <FlatList
+                            data={this.state.list}
+                            renderItem={this.renderMovie}
+                            style={styles.list}
+                            keyExtractor={(item, index) => index.toString()}
+                            ListFooterComponent={this._renderFooter.bind(this)}
+                            onEndReached={this._onEndReached.bind(this)}
+                            onEndReachedThreshold={1}
+                            ItemSeparatorComponent={this._separator}
+                        />
+                        <View style={{padding: 12, backgroundColor: '#fff'}}></View>
+                        {/*<TouchableOpacity onPress={() => {this.fetchData()}} style={{ zIndex: 999999}}>*/}
                         <View style={styles.refresh} onTouchEnd={this.refreshData}>
                             <View style={styles.refreshLoad}>
                                 {loading}
                             </View>
                         </View>
-                    {/*</TouchableOpacity>*/}
-                </Provider>
+                        {/*</TouchableOpacity>*/}
+                    </Provider>
+                    <StatusBar translucent={false} backgroundColor='#D92553' barStyle="light-content"/>
+                </Drawer>
             </SafeAreaView>
         );
     }
@@ -178,12 +211,84 @@ export default class SampleAppMovies extends Component {
         //加载数据
         return this.renderData();
     }
+
+    sidebar() {
+        return (
+            <View>
+                <View style={styles.sidebarTOP}>
+                    <TouchableOpacity style={{flexDirection: 'row', justifyContent: 'flex-end'}}
+                                      onPress={() => this.drawer && this.drawer.closeDrawer()}
+                    >
+                        <Image source={{uri: 'https://images.ufutx.com/201911/11/ef443905239d29665d4976264d51bbab.png'}}
+                               style={styles.sidebarBack}/>
+                    </TouchableOpacity>
+                    <View style={{flexDirection: 'row'}}>
+                        <Image source={{uri: 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3699703635,816718470&fm=26&gp=0.jpg'}}
+                               style={styles.sidebarPic}/>
+                               <View style={styles.sidebarUser}>
+                                   <Text style={{color: '#fff'}}>AngelaBaby</Text>
+                                   <Text style={styles.UserInfoEdit}>编辑资料</Text>
+                               </View>
+                    </View>
+                    <View style={{flexDirection: 'row', justifyContent: 'space-between', marginRight: 42,marginLeft: 42,}}>
+                        <View style={styles.sidebarUser}>
+                            {/*<Image source={{uri: 'https://images.ufutx.com/201911/11/62a1dea40e7269c5610517107f628a44.png'}}*/}
+                                   {/*style={styles.sidebarBack}/>*/}
+                            <Text style={[styles.UserNum]}>32</Text>
+                            <Text style={styles.UserTitle}>我的好友</Text>
+                        </View>
+                        <View style={styles.sidebarUser}>
+                            {/*<Image source={{uri: 'https://images.ufutx.com/201911/11/62a1dea40e7269c5610517107f628a44.png'}}*/}
+                            {/*style={styles.sidebarBack}/>*/}
+                            <Text style={[styles.UserNum]}>32</Text>
+                            <Text style={styles.UserTitle}>我的好友</Text>
+                        </View>
+                        <View style={styles.sidebarUser}>
+                            {/*<Image source={{uri: 'https://images.ufutx.com/201911/11/62a1dea40e7269c5610517107f628a44.png'}}*/}
+                            {/*style={styles.sidebarBack}/>*/}
+                            <Text style={[styles.UserNum]}>32</Text>
+                            <Text style={styles.UserTitle}>我的好友</Text>
+                        </View>
+                    </View>
+                </View>
+                <View style={styles.sidebarList}>
+                    <View  style={styles.sidebarBox}>
+                    <Image source={{uri: 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3699703635,816718470&fm=26&gp=0.jpg'}}
+                        style={styles.ItemIconStyle}/>
+                        <Text style={styles.ItemTextStyle}>实名认证</Text>
+                    </View>
+                </View>
+                <View style={styles.sidebarList}>
+                    <View  style={styles.sidebarBox}>
+                    <Image source={{uri: 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3699703635,816718470&fm=26&gp=0.jpg'}}
+                               style={styles.ItemIconStyle}/>
+                        <Text style={styles.ItemTextStyle}>购买会员</Text>
+                    </View>
+                </View>
+                {/*<View style={styles.sidebarList}>*/}
+                    {/*<View  style={styles.sidebarBox}>*/}
+                    {/*<Image source={{uri: 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3699703635,816718470&fm=26&gp=0.jpg'}}*/}
+                               {/*style={styles.ItemIconStyle}/>*/}
+                        {/*<Text style={styles.ItemTextStyle}>实名认证</Text>*/}
+                    {/*</View>*/}
+                {/*</View>*/}
+                <View style={styles.sidebarList}>
+                    <View  style={styles.sidebarBox}>
+                        <Image source={{uri: 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3699703635,816718470&fm=26&gp=0.jpg'}}
+                               style={styles.ItemIconStyle}/>
+                        <Text style={styles.ItemTextStyle}>设置</Text>
+                    </View>
+                </View>
+            </View>
+        )
+    }
+
     //加载失败view
     renderErrorView() {
         return (
             <View style={styles.container}>
                 <Text>
-                    Fail
+                    抱歉！没有加载出来...
                 </Text>
             </View>
         );
@@ -192,28 +297,29 @@ export default class SampleAppMovies extends Component {
     renderLoadingView() {
         return (
             <View style={styles.container}>
-                <ActivityIndicator size="small" color="#D92553" />
+                <ActivityIndicator size="small" color="#D92553"/>
                 <Text style={{marginLeft: 12, color: '#666666'}}>加载中...</Text>
             </View>
         );
     }
-    _renderFooter(){
+
+    _renderFooter() {
         if (this.state.showFoot === 1) {
             return (
-                <View style={{height:30,alignItems:'center',justifyContent:'flex-start',}}>
-                    <Text style={{color:'#999999',fontSize:14,marginTop:5,marginBottom:5,}}>
+                <View style={{height: 30, alignItems: 'center', justifyContent: 'flex-start',}}>
+                    <Text style={{color: '#999999', fontSize: 14, marginTop: 5, marginBottom: 5,}}>
                         没有更多数据了
                     </Text>
                 </View>
             );
-        } else if(this.state.showFoot === 2) {
+        } else if (this.state.showFoot === 2) {
             return (
                 <View style={styles.footer}>
-                    <ActivityIndicator />
+                    <ActivityIndicator/>
                     <Text>正在加载更多数据...</Text>
                 </View>
             );
-        } else if(this.state.showFoot === 0){
+        } else if (this.state.showFoot === 0) {
             return (
                 <View style={styles.footer}>
                     <Text></Text>
@@ -221,51 +327,29 @@ export default class SampleAppMovies extends Component {
             );
         }
     }
-    renderNoList() {
-        return (
-            <Provider>
-                <SearchBar
-                    // defaultValue="初始值"
-                    placeholder="搜索"
-                    value={this.state.keyword}
-                    onSubmit={value => {
-                        this.onSubmit(value)
-                    }}
-                    onCancel={() => {
-                        this.clear()
-                    }}
-                    onChange={value => {
-                        this.onChange(value)
-                    }}
 
-                />
-                <View style={styles.container}>
-                    <Text>暂无匹配数据...</Text>
-                </View>
-            </Provider>
-        );
+    _separator() {
+        return <View style={{height: 1, backgroundColor: '#999999'}}/>;
     }
-    _separator(){
-        return <View style={{height:1,backgroundColor:'#999999'}}/>;
-    }
-    _onEndReached(){
+
+    _onEndReached() {
         //如果是正在加载中或没有更多数据了，则返回
-        if(this.state.showFoot != 0 ){
-            return ;
+        if (this.state.showFoot != 0) {
+            return;
         }
         //如果当前页大于或等于总页数，那就是到最后一页了，返回
-        if((pageNo!=1) && (pageNo>=totalPage)){
+        if ((pageNo != 1) && (pageNo >= totalPage)) {
             return;
         } else {
             pageNo++;
         }
         //底部显示正在加载更多数据
-        this.setState({showFoot:2});
+        this.setState({showFoot: 2});
         //获取数据
-        this.fetchData( pageNo );
+        this.fetchData(pageNo);
     }
 
-    renderMovie({ item }) {
+    renderMovie({item}) {
         // { item }是一种“解构”写法，请阅读ES2015语法的相关文档
         // item也是FlatList中固定的参数名，请阅读FlatList的相关文档
         let id = item.id
@@ -276,24 +360,35 @@ export default class SampleAppMovies extends Component {
             <Image source={woman} style={styles.iconStyle}/>;
 
         return (
-            <TouchableOpacity onPress={() => {Actions.userDetail({id, id})}}>
+            <TouchableOpacity onPress={() => {
+                Actions.userDetail({id, id})
+            }}>
                 <View>
                     <View style={styles.container}>
                         <Image
-                            source={{ uri: item.photo }}
-                            style={[{width: width*.92, height: width*.9}]}
+                            source={{uri: item.photo}}
+                            style={[{width: width * .92, height: width * .9}]}
                         />
                     </View>
                     <View style={styles.containerText}>
-                        <View style={{flexDirection: "row", justifyContent: "flex-start",alignItems: 'center', flex: 1,}}>
+                        <View style={{
+                            flexDirection: "row",
+                            justifyContent: "flex-start",
+                            alignItems: 'center',
+                            flex: 1,
+                        }}>
                             <Text style={{marginLeft: 8,}}>{item.name}</Text>
                             {iconText}
                         </View>
-                        <Text style={{marginRight: 4,color: '#97979f',fontSize: 12}}>{item.profile_courtship.province}   {item.profile_courtship.city}</Text>
+                        <Text style={{
+                            marginRight: 4,
+                            color: '#97979f',
+                            fontSize: 12
+                        }}>{item.profile_courtship.province} {item.profile_courtship.city}</Text>
                     </View>
-                    <View style={[styles.containerText,{marginTop: -8}]}>
-                        <Text style={{marginLeft: 8,color: '#97979f',fontSize: 12}}>
-                            {item.age} {item.profile_courtship.stature+'cm'} {item.industry}/{item.industry_sub}
+                    <View style={[styles.containerText, {marginTop: -8}]}>
+                        <Text style={{marginLeft: 8, color: '#97979f', fontSize: 12}}>
+                            {item.age} {item.profile_courtship.stature + 'cm'} {item.industry}/{item.industry_sub}
                         </Text>
                     </View>
                     {/*<View style={[styles.dotStyle,{width: width}]}></View>*/}
@@ -327,7 +422,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderRadius: 50,
         shadowColor: '#D92553',
-        shadowOffset: {width: 0,height: 0},
+        shadowOffset: {width: 0, height: 0},
         shadowOpacity: 22,
         shadowRadius: 22,
         flex: 1,
@@ -362,15 +457,130 @@ const styles = StyleSheet.create({
         fontSize: 15,
         color: 'blue',
     },
-    footer:{
-        flexDirection:'row',
-        height:24,
-        justifyContent:'center',
-        alignItems:'center',
-        marginBottom:10,
+    footer: {
+        flexDirection: 'row',
+        height: 24,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 10,
     },
     content: {
         fontSize: 15,
         color: 'black',
-    }
+    },
+    containerv: {
+        // flex: 1,
+        // alignItems: 'center',
+        // backgroundColor: '#D92553',
+    },
+    navbarLeftItemStyle: {
+        width: 32,
+        height: 32,
+        marginLeft: 15,
+        borderRadius: 50,
+        borderColor: '#fff',
+        borderWidth: 1,
+    },
+    navbarTitleItemStyle: {
+        width: 66,
+        height: 20,
+    },
+    navbarRightItemStyle: {
+        width: 24,
+        height: 24,
+        marginRight: 15,
+    },
+    searchStyle: {
+        height: 30,
+        width: width*.7,
+        borderColor: '#fff', borderWidth: 1,
+        borderRadius: 22,
+        paddingRight: 12,
+        paddingLeft: 12,
+        paddingTop: 0,
+        paddingBottom: 0,
+        backgroundColor: '#fff',
+        color: '#666'
+    },
+    sidebarTOP: {
+        height: height*0.3,
+        backgroundColor: '#D92553',
+    },
+    sidebarBack: {
+        width: 24,
+        height: 24,
+        margin: 22,
+        marginBottom: 2
+    },
+    sidebarPic:{
+        width: 60,
+        height: 60,
+        borderColor: "#fff",
+        borderWidth: 1,
+        borderRadius: 50,
+        margin: 22,
+        marginTop: 2,
+        marginRight: 12,
+    },
+    sidebarUser: {
+        flexDirection: 'column',
+        marginTop: 8,
+    },
+    UserInfoEdit:{
+        color: '#fff',
+        borderWidth: 1,
+        borderColor: '#fff',
+        fontSize: 12,
+        marginTop: 8,
+        textAlign: 'center',
+        borderRadius: 12,
+        paddingLeft: 6,
+        paddingRight: 6,
+        paddingTop: 2,
+        paddingBottom: 1,
+    },
+    UserTitle: {
+        color: '#fff',
+        borderBottomWidth: 1,
+        borderColor: '#fff',
+        fontSize: 12,
+        textAlign: 'center',
+        paddingBottom: 2,
+        marginTop: 2,
+        paddingLeft: 4,
+        paddingRight: 4,
+    },
+    UserNum: {
+        color: '#fff',
+        padding: 0,
+        borderWidth: 0,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        fontSize: 22,
+    },
+    sidebarList: {
+        height: 38,
+        marginRight: 12,
+        marginLeft: 12,
+        marginTop: 18,
+        borderBottomWidth: 1,
+        borderColor: '#f0f0f0',
+        // backgroundColor: 'pink'
+    },
+    sidebarBox: {
+        flexDirection: 'row',
+        flex: 1,
+        // marginTop: 6,
+        marginLeft: 4,
+    },
+    ItemIconStyle: {
+        width: 28,
+        height: 28,
+        marginRight: 8,
+    },
+    ItemTextStyle: {
+        fontSize: 16,
+        marginLeft: 6,
+        marginTop: 4,
+    },
 });

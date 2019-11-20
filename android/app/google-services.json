@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "791137218596",
+    "firebase_url": "https://app-l9yx.firebaseio.com",
+    "project_id": "app-l9yx",
+    "storage_bucket": "app-l9yx.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:791137218596:android:2c70417bfa1bb7b77528b1",
+        "android_client_info": {
+          "package_name": "com.loveapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "791137218596-dfgc8f4pa8qgctnmk7nfp9q1car80c7s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBv3CwMoHpgJbSIjbsgOVI-UfbHfP8Pw4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "791137218596-dfgc8f4pa8qgctnmk7nfp9q1car80c7s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

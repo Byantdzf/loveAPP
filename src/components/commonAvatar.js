@@ -12,7 +12,7 @@ export default class commonUpload extends Component {
         this.state = {
             ossConfig: {},
             image: '',
-            visible: true
+            visible: false
         }
 
         this.onClose = () => {
@@ -147,7 +147,6 @@ export default class commonUpload extends Component {
 
     render() {
         return (
-            <Provider>
                 <Modal
                     popup
                     visible={this.state.visible}
@@ -196,7 +195,6 @@ export default class commonUpload extends Component {
                         </TouchableOpacity>
                     </View>
                 </Modal>
-            </Provider>
         );
     }
 }

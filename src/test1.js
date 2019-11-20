@@ -5,9 +5,9 @@ import {Button, InputItem, List, Toast, Provider, Modal} from '@ant-design/react
 import AsyncStorage from "@react-native-community/async-storage";
 import ImagePicker from 'react-native-image-crop-picker';
 import base64 from 'react-native-base64'
-import CommonUpload from '../components/commonUpload'
+import CommonUpload from './components/commonUpload'
 
-export default class test extends Component {
+export default class test1 extends Component {
     constructor(props) { // 初始化数据
         super(props);
         this.state = {

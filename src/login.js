@@ -11,8 +11,8 @@ export default class login extends Component {
         super(props);
         this.state = {
             text: '获取验证码',
-            mobile: '15707534403',
-            code: '999999999',
+            mobile: '',
+            code: '',
             timer: '',
             time: 60,
             codeActive: true,
@@ -187,7 +187,7 @@ export default class login extends Component {
                         </List>
                         <View style={[styles.box,{flexDirection: 'row',alignContent: 'flex-end'}]}>
                             <TouchableOpacity onPress={this.selectBtn}>
-                                <Image source={selectIcon} style={{width: 20,height: 20,}}/>
+                                <Image source={selectIcon} style={{width: 20,height: 20,marginLeft: 24}}/>
                             </TouchableOpacity>
                             <Text style={styles.privacy} onPress={this.selectBtn}>我已阅读并同意</Text>
                             <Text style={[styles.privacy,{color: '#d92553'}]} onPress={()=>{Actions.protocol()}}>《用户服务协议》</Text>
@@ -243,7 +243,7 @@ const styles = StyleSheet.create({
         zIndex: 999,
     },
     box: {
-        width: 280,
+        width: width*.8,
         zIndex: 999,
         marginTop: 12,
         marginBottom: 16,
