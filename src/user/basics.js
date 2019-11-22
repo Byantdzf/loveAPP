@@ -51,7 +51,7 @@ export default class userData extends Component {
         }
         console.log(data)
         Toast.loading('保存信息中...', .8);
-        fetchRequest('official/app/user/profile', 'PUT', data)
+        fetchRequest('official/app/user/profile', 'POST', data)
             .then(res => {
                 console.log(res)
                 Toast.success('保存成功');
@@ -132,6 +132,7 @@ export default class userData extends Component {
     }
     renderBasice() {
         let codeIcon = {uri: 'https://images.ufutx.com/201910/17/70c4a203145a1bbc535b0524a5133bee.png'};
+        let dot = (<Text style={{color: '#d92553'}}>*</Text>)
         return (
             <View style={{backgroundColor: '#ffffff',}}>
                 <View style={[styles.touchConainer, {width: width*.94 }]}>
@@ -152,7 +153,7 @@ export default class userData extends Component {
                             // extra={<Image source={codeIcon} style={styles.icon}/>}
                             placeholder="昵称"
                         >
-                            昵称
+                            <Text>昵称 {dot}</Text>
                         </InputItem>
                         <TouchableOpacity onPress={() => {this.selectSex()}}>
                             <InputItem
@@ -163,7 +164,7 @@ export default class userData extends Component {
                                 placeholder="性别"
                                 extra={<Image source={codeIcon} style={styles.icon}/>}
                             >
-                                性别
+                                <Text>性别 {dot}</Text>
                             </InputItem>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => {this.selectBelief()}}>
@@ -175,11 +176,11 @@ export default class userData extends Component {
                                 placeholder="信仰"
                                 extra={<Image source={codeIcon} style={styles.icon}/>}
                             >
-                                信仰
+                                <Text>信仰 {dot}</Text>
                             </InputItem>
                         </TouchableOpacity>
                         <View style={styles.DatePickerBox}>
-                            <Text style={[styles.DatePickerText,{width: width * .2,}]}>出生日期</Text>
+                            <Text style={[styles.DatePickerText,{width: width * .2,}]}>出生日期 {dot}</Text>
                             <View style={{flexDirection: 'row'}}>
                                 <DatePicker
                                     style={styles.dateStyle}

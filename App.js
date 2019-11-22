@@ -31,6 +31,8 @@ import protocol from "./src/protocol";
 import test from "./src/test1";
 import basics from './src/user/basics'; // 基本资料
 import userData from "./src/user/data"; // 详细资料
+import friends from './src/user/friends'  // 我的好友
+import fans from './src/user/fans'  // 我的粉丝
 
 // const App = () => {
 //     return (
@@ -87,24 +89,34 @@ export default class App extends Component<Props> {
                            component={basics}
                            title="基本资料"
                            hideNavBar={true}
-                           initial
+                           // initial
                     />
                     <Scene key="userData"
                            component={userData}
                            title="用户资料"
                            hideNavBar={true}
-                        // initial
                     />
                     <Scene key="home"
                            component={home}
                            title="首页"
                            hideNavBar={true}
-                           // initial
+                           initial
                     />
                     <Scene key="userDetail"
                            component={userDetail}
                            title="用户详情"
                            hideNavBar={true}
+                    />
+                    <Scene key="friends"
+                           component={friends}
+                           title="我的好友"
+                           hideNavBar={true}
+                    />
+                    <Scene key="fans"
+                           component={fans}
+                           title="我的粉丝"
+                           hideNavBar={true}
+                           // initial
                     />
                     <Scene
                         key="gray"

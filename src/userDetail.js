@@ -19,6 +19,7 @@ export default class SampleAppMovies extends Component {
             keyword: '',
             loaded: false,
             visible: false,
+            isLike: false
         };
         // 在ES6中，如果在自定义的函数里使用了this关键字，则需要对其进行“绑定”操作，否则this的指向会变为空
         // 像下面这行代码一样，在constructor中使用bind是其中一种做法（还有一些其他做法，如使用箭头函数等）
@@ -127,6 +128,16 @@ export default class SampleAppMovies extends Component {
             console.log(`异常: ${err}`);
         })
     }
+
+    addFriend() {
+        fetchRequest(`official/app/friend/users/`+ this.props.id, 'POST')
+            .then(res => {
+                console.log(res.data)
+            }).catch(err => {
+            console.log(`异常: ${err}`);
+        })
+    }
+
     onHorizontalSelectedIndexChange(index) {
         /* tslint:disable: no-console */
         console.log('horizontal change to', index);
@@ -160,17 +171,34 @@ export default class SampleAppMovies extends Component {
             </View>
         );
     }
+    renderBtn() {
+        return (
+            <View>
+                {/*<View style={{height: 32}}></View>*/}
+                <TouchableOpacity onPress={() => {
+                    this.addFriend()
+                }}>
+                    <View style={styles.btnStyle}>
+                        <Text style={styles.textStyle}>加为好友</Text>
+                    </View>
+                </TouchableOpacity>
+                <View style={{height: 62}}></View>
+            </View>
+        )
+    }
 
     renderDetail( ) {
         let man = {uri: 'https://images.ufutx.com/201910/21/a92b5d29dedb9932568f97fcdff865bc.png'};
         let woman = {uri: 'https://images.ufutx.com/201910/21/40b26d71cf2af9b1be0f874605c6ef2f.png'};
+        let likeIcon = {
+            uri: this.state.isLike?'https://images.ufutx.com/201911/22/96b50150e9d66881285406c61466f4c3.png':'https://images.ufutx.com/201911/22/166a4b498b15348ae70138fe3be7a5e9.png'
+        }
         const {user} = this.state
         let items = user.profile_photos.map((item, index) => {
             return {
                 uri: item.photo
             }
         })
-        console.log(items)
         let iconText = user.sex == 1 ?
             <Image source={man} style={[styles.iconStyle]}/> :
             <Image source={woman} style={[styles.iconStyle]}/>;
@@ -204,6 +232,14 @@ export default class SampleAppMovies extends Component {
                                 );
                             })}
                         </Carousel>
+                    </View>
+                    <View style={{
+                        flexDirection: "row",
+                        justifyContent: "flex-end",
+                        marginTop: -32,
+                        marginRight: 12
+                    }}>
+                        <Image source={likeIcon} style={[{width: 72, height: 72,}]}/>
                     </View>
                     <View style={styles.containerText}>
                         <View style={{flexDirection: "row", justifyContent: "flex-start",alignItems: 'center', flex: 1,}}>
@@ -247,8 +283,9 @@ export default class SampleAppMovies extends Component {
                     </View>
                     {this.userApproved()}
                     <View style={{height: 100}}>{/*占位*/}</View>
+                    {this.renderBtn()}
                 </ScrollView>
-                <ActionButton buttonColor="#D92553">
+                <ActionButton buttonColor="#D92553" offsetX={34} offsetY={100}>
                     <ActionButton.Item buttonColor='rgba(231,76,60,0)' title="主页" onPress={() => Actions.home()}>
                         <Image
                             source={{uri: 'https://images.ufutx.com/201910/22/44641052ec087246a15e8551df3adfac.png'}}
@@ -409,5 +446,24 @@ const styles = StyleSheet.create({
         paddingBottom: 1,
         borderRadius: 3,
         marginTop: 10,
-    }
+    },
+    btnStyle: {
+        width: 100,
+        backgroundColor: '#D92553',
+        alignSelf: 'center',
+        textAlign: 'center',
+        alignItems: 'center',
+        justifyContent: 'center',
+        margin: 5,
+        padding: 4,
+        borderRadius: 4,
+    },
+    textStyle: {
+        width: 200,
+        textAlign: 'center',
+        justifyContent: 'center',
+        margin: 5,
+        color: '#fff',
+        fontSize: 14,
+    },
 });

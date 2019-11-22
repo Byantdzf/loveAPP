@@ -13,15 +13,16 @@ import {
     StatusBar,
     TextInput
 } from "react-native";
-import {fetchRequest} from '../config/FetchUtils';
-import {SearchBar, Toast, Provider, Drawer} from "@ant-design/react-native";
+import {fetchRequest} from '../../config/FetchUtils';
+import {SearchBar, Toast, Provider, Drawer, SwipeAction} from "@ant-design/react-native";
 import {Actions} from "react-native-router-flux";
-import CommunalNavBar from './components/communalNavBar';
+import CommunalNavBar from '../components/communalNavBar';
+import {BaseComponent} from '../../baseComponent/baseComponent'
 
 let pageNo = 1;//当前第几页
 let totalPage = 5;//总的页数
 
-export default class SampleAppMovies extends Component {
+export default class friends extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -41,8 +42,6 @@ export default class SampleAppMovies extends Component {
             showFoot: 0, // 控制foot， 0：隐藏footer  1：已加载完成,没有更多数据   2 ：显示加载中
             isRefreshing: false,//下拉控制
         };
-        // 在ES6中，如果在自定义的函数里使用了this关键字，则需要对其进行“绑定”操作，否则this的指向会变为空
-        // 像下面这行代码一样，在constructor中使用bind是其中一种做法（还有一些其他做法，如使用箭头函数等）
         this.fetchData = this.fetchData.bind(this);
         this.refreshData = () => {
             this.setState({//复原数据
@@ -63,11 +62,11 @@ export default class SampleAppMovies extends Component {
     }
 
     fetchData(pageNo) {
-        Toast.loading('加载中...', .4);
+        // Toast.loading('加载中...', .2);
         this.setState({
             loading: !this.state.loading
         });
-        fetchRequest(`official/app/home?page=` + pageNo + `&keyword=` + this.state.keyword, 'GET')
+        fetchRequest(`official/app/friends?page=` + pageNo + `&keyword=` + this.state.keyword, 'GET')
             .then(res => {
                 let foot = 0;
                 if (pageNo >= totalPage) {
@@ -111,18 +110,6 @@ export default class SampleAppMovies extends Component {
         })
         console.log(value)
     }
-
-    // 返回左边按钮
-    renderLeftItem() {
-        return (
-            <TouchableOpacity onPress={() => this.drawer && this.drawer.openDrawer()}>
-                <Image
-                    source={{uri: 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3699703635,816718470&fm=26&gp=0.jpg'}}
-                    style={styles.navbarLeftItemStyle}/>
-            </TouchableOpacity>
-        );
-    }
-
     // 返回中间按钮
     renderTitleItem() {
         return (
@@ -131,7 +118,7 @@ export default class SampleAppMovies extends Component {
                     value={this.state.keyword}
                     style={styles.searchStyle}
                     onChangeText={text => this.onChange(text)}
-                    placeholder="搜索TA..."
+                    placeholder="搜索好友..."
                     onBlur={value => {
                         this.onSubmit(value)
                     }}
@@ -140,38 +127,12 @@ export default class SampleAppMovies extends Component {
         );
     }
 
-    // 返回右边按钮
-    renderRightItem() {
-        return (
-            <TouchableOpacity>
-                <Image source={{uri: 'https://images.ufutx.com/201911/11/33a46981f02bf62c9c47bcfd2d9d9ec2.png'}}
-                       style={styles.navbarRightItemStyle}/>
-            </TouchableOpacity>
-        );
-    }
-
     renderData() {
-        let loading = this.state.loading ?
-            <Image source={{uri: 'https://images.ufutx.com/201910/29/69c850040d52f8182741f5aaed7f155e.png'}}
-                   style={styles.refreshIcon}/>
-            : <ActivityIndicator size="large" color="#D92553"/>;
         return (
             <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
-                <Drawer
-                    sidebar={this.sidebar()}
-                    position="left"
-                    open={false}
-                    drawerRef={el => (this.drawer = el)}
-                    onOpenChange={this.onOpenChange}
-                    drawerBackgroundColor="#fff"
-                    open={this.state.visible}
-                    drawerWidth={width}
-                >
                     <View style={styles.containerv}>
                         <CommunalNavBar
-                            leftItem={() => this.renderLeftItem()}
                             titleItem={() => this.renderTitleItem()}
-                            rightItem={() => this.renderRightItem()}
                         />
                     </View>
                     <Provider>
@@ -185,17 +146,8 @@ export default class SampleAppMovies extends Component {
                             onEndReachedThreshold={1}
                             ItemSeparatorComponent={this._separator}
                         />
-                        <View style={{padding: 12, backgroundColor: '#fff'}}></View>
-                        {/*<TouchableOpacity onPress={() => {this.fetchData()}} style={{ zIndex: 999999}}>*/}
-                        <View style={styles.refresh} onTouchEnd={this.refreshData}>
-                            <View style={styles.refreshLoad}>
-                                {loading}
-                            </View>
-                        </View>
-                        {/*</TouchableOpacity>*/}
                     </Provider>
                     <StatusBar translucent={false} backgroundColor='#D92553' barStyle="light-content"/>
-                </Drawer>
             </SafeAreaView>
         );
     }
@@ -211,78 +163,6 @@ export default class SampleAppMovies extends Component {
         //加载数据
         return this.renderData();
     }
-
-    sidebar() {
-        return (
-            <View>
-                <View style={styles.sidebarTOP}>
-                    <TouchableOpacity style={{flexDirection: 'row', justifyContent: 'flex-end'}}
-                                      onPress={() => this.drawer && this.drawer.closeDrawer()}
-                    >
-                        <Image source={{uri: 'https://images.ufutx.com/201911/11/ef443905239d29665d4976264d51bbab.png'}}
-                               style={styles.sidebarBack}/>
-                    </TouchableOpacity>
-                    <View style={{flexDirection: 'row'}}>
-                        <Image source={{uri: 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3699703635,816718470&fm=26&gp=0.jpg'}}
-                               style={styles.sidebarPic}/>
-                               <View style={styles.sidebarUser}>
-                                   <Text style={{color: '#fff'}}>AngelaBaby</Text>
-                                   <Text style={styles.UserInfoEdit}>编辑资料</Text>
-                               </View>
-                    </View>
-                    <View style={{flexDirection: 'row', justifyContent: 'space-between', marginRight: 42,marginLeft: 42,}}>
-                        <View style={styles.sidebarUser}>
-                            {/*<Image source={{uri: 'https://images.ufutx.com/201911/11/62a1dea40e7269c5610517107f628a44.png'}}*/}
-                                   {/*style={styles.sidebarBack}/>*/}
-                            <Text style={[styles.UserNum]}>32</Text>
-                            <Text style={styles.UserTitle}>我的好友</Text>
-                        </View>
-                        <View style={styles.sidebarUser}>
-                            {/*<Image source={{uri: 'https://images.ufutx.com/201911/11/62a1dea40e7269c5610517107f628a44.png'}}*/}
-                            {/*style={styles.sidebarBack}/>*/}
-                            <Text style={[styles.UserNum]}>32</Text>
-                            <Text style={styles.UserTitle}>我的好友</Text>
-                        </View>
-                        <View style={styles.sidebarUser}>
-                            {/*<Image source={{uri: 'https://images.ufutx.com/201911/11/62a1dea40e7269c5610517107f628a44.png'}}*/}
-                            {/*style={styles.sidebarBack}/>*/}
-                            <Text style={[styles.UserNum]}>32</Text>
-                            <Text style={styles.UserTitle}>我的好友</Text>
-                        </View>
-                    </View>
-                </View>
-                <View style={styles.sidebarList}>
-                    <View  style={styles.sidebarBox}>
-                    <Image source={{uri: 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3699703635,816718470&fm=26&gp=0.jpg'}}
-                        style={styles.ItemIconStyle}/>
-                        <Text style={styles.ItemTextStyle}>实名认证</Text>
-                    </View>
-                </View>
-                <View style={styles.sidebarList}>
-                    <View  style={styles.sidebarBox}>
-                    <Image source={{uri: 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3699703635,816718470&fm=26&gp=0.jpg'}}
-                               style={styles.ItemIconStyle}/>
-                        <Text style={styles.ItemTextStyle}>购买会员</Text>
-                    </View>
-                </View>
-                {/*<View style={styles.sidebarList}>*/}
-                    {/*<View  style={styles.sidebarBox}>*/}
-                    {/*<Image source={{uri: 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3699703635,816718470&fm=26&gp=0.jpg'}}*/}
-                               {/*style={styles.ItemIconStyle}/>*/}
-                        {/*<Text style={styles.ItemTextStyle}>实名认证</Text>*/}
-                    {/*</View>*/}
-                {/*</View>*/}
-                <View style={styles.sidebarList}>
-                    <View  style={styles.sidebarBox}>
-                        <Image source={{uri: 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3699703635,816718470&fm=26&gp=0.jpg'}}
-                               style={styles.ItemIconStyle}/>
-                        <Text style={styles.ItemTextStyle}>设置</Text>
-                    </View>
-                </View>
-            </View>
-        )
-    }
-
     //加载失败view
     renderErrorView() {
         return (
@@ -306,7 +186,7 @@ export default class SampleAppMovies extends Component {
     _renderFooter() {
         if (this.state.showFoot === 1) {
             return (
-                <View style={{height: 30, alignItems: 'center', justifyContent: 'flex-start',}}>
+                <View style={{height: 40, alignItems: 'center', justifyContent: 'flex-start',}}>
                     <Text style={{color: '#999999', fontSize: 14, marginTop: 5, marginBottom: 5,}}>
                         没有更多数据了
                     </Text>
@@ -329,7 +209,7 @@ export default class SampleAppMovies extends Component {
     }
 
     _separator() {
-        return <View style={{height: 1, backgroundColor: '#999999'}}/>;
+        return <View style={{height: 1, width:width*.8, backgroundColor: '#f6f6f6', alignSelf: 'flex-end'}}/>;
     }
 
     _onEndReached() {
@@ -349,6 +229,15 @@ export default class SampleAppMovies extends Component {
         this.fetchData(pageNo);
     }
 
+    _deleteUser(id) {
+        fetchRequest(`official/app/home?`, 'DELETE')
+            .then(res => {
+                console.log('删除成功')
+            }).catch(err => {
+            console.log(`异常: ${err}`);
+        })
+    }
+
     renderMovie({item}) {
         // { item }是一种“解构”写法，请阅读ES2015语法的相关文档
         // item也是FlatList中固定的参数名，请阅读FlatList的相关文档
@@ -363,41 +252,62 @@ export default class SampleAppMovies extends Component {
         } else {
             iconText = <Image source={man} style={styles.iconStyle}/>
         }
-
+        const right = [
+            {
+                text: '查看好友',
+                onPress: () => Actions.userDetail({id, id}),
+                style: { backgroundColor: 'orange', color: 'white' },
+            },
+            {
+                text: '删除好友',
+                onPress: () => this._deleteUser(id),
+                style: { backgroundColor: 'red', color: 'white' },
+            },
+        ];
         return (
             <TouchableOpacity onPress={() => {
                 Actions.userDetail({id, id})
             }}>
-                <View>
-                    <View style={styles.container}>
-                        <Image
-                            source={{uri: item.photo}}
-                            style={[{width: width * .92, height: width * .9}]}
-                        />
-                    </View>
-                    <View style={styles.containerText}>
-                        <View style={{
-                            flexDirection: "row",
-                            justifyContent: "flex-start",
-                            alignItems: 'center',
-                            flex: 1,
-                        }}>
-                            <Text style={{marginLeft: 8,}}>{item.name}</Text>
-                            {iconText}
+                <SwipeAction
+                    autoClose
+                    style={{ backgroundColor: 'transparent' }}
+                    right={right}
+                    onOpen={() => console.log('open')}
+                    onClose={() => console.log('close')}
+                >
+                    <View style={{
+                        flexDirection: "row",
+                        justifyContent: "flex-start",
+                    }}>
+                        <View style={{padding: 12}}>
+                            <Image
+                                source={{uri: item.photo}}
+                                style={[styles.listPhoto]}
+                            />
                         </View>
-                        <Text style={{
-                            marginRight: 4,
-                            color: '#97979f',
-                            fontSize: 12
-                        }}>{item.profile_courtship ? item.profile_courtship.province : '未获取'} {item.profile_courtship?item.profile_courtship.city:'未获取'}</Text>
+                        <View style={{
+                            paddingTop: 18,
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                            flex: 1,
+                            paddingRight: 18
+                        }}>
+                            <View style={{
+                                flexDirection: "row",
+                                justifyContent: "flex-start",
+                            }}>
+                                <Text style={{marginLeft: 4,}}>{item.name}</Text>
+                                {iconText}
+                            </View>
+                            <View><Text style={{color: '#666'}}>9月19号</Text></View>
+                        </View>
                     </View>
-                    <View style={[styles.containerText, {marginTop: -8}]}>
+                    <View style={[styles.containerText]}>
                         <Text style={{marginLeft: 8, color: '#97979f', fontSize: 12}}>
-                            {item.age} {item.profile_courtship?item.profile_courtship.stature + 'cm':'未获取'} {item.industry}/{item.industry_sub}
+                            {item.age} {item.profile_courtship?item.profile_courtship.stature + 'cm':'未获取'} {item.industry}/{item.industry_sub} {item.profile_courtship?item.profile_courtship.city:'未获取'}
                         </Text>
                     </View>
-                    {/*<View style={[styles.dotStyle,{width: width}]}></View>*/}
-                </View>
+                </SwipeAction>
             </TouchableOpacity>
         );
     }
@@ -440,12 +350,12 @@ const styles = StyleSheet.create({
         height: 32,
     },
     containerText: {
-        margin: 12,
-        marginTop: 0,
-        flex: 1,
         flexDirection: "row",
         justifyContent: "space-between",
-        // backgroundColor: "#dedede"
+        flex: 1,
+        marginLeft: 68,
+        marginTop: -32,
+        marginBottom: 16
     },
     iconStyle: {
         width: 14, height: 14, marginTop: 2, marginLeft: 2,
@@ -481,10 +391,10 @@ const styles = StyleSheet.create({
     navbarLeftItemStyle: {
         width: 32,
         height: 32,
-        marginLeft: 15,
-        borderRadius: 50,
-        borderColor: '#fff',
-        borderWidth: 1,
+        marginLeft: 10,
+        // borderRadius: 50,
+        // borderColor: '#fff',
+        // borderWidth: 1,
     },
     navbarTitleItemStyle: {
         width: 66,
@@ -497,7 +407,7 @@ const styles = StyleSheet.create({
     },
     searchStyle: {
         height: 30,
-        width: width*.7,
+        width: width*.92,
         borderColor: '#fff', borderWidth: 1,
         borderRadius: 22,
         paddingRight: 12,
@@ -588,4 +498,11 @@ const styles = StyleSheet.create({
         marginLeft: 6,
         marginTop: 4,
     },
+    listPhoto:{
+        width: 50,
+        height: 50,
+        borderRadius: 50,
+        borderColor: '#fff',
+        borderWidth: 1,
+    }
 });
