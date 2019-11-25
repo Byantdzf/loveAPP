@@ -47,8 +47,6 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-<<<<<<< HEAD
-=======
 	<key>UIAppFonts</key>
 	<array>
 		<string>antfill.ttf</string>
@@ -70,6 +68,5 @@
 		<string>SimpleLineIcons.ttf</string>
 		<string>Zocial.ttf</string>
 	</array>
->>>>>>> d153bc22744d4b7adb3a93ebe5d5825fab952f5d
 </dict>
 </plist>
