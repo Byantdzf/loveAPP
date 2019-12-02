@@ -17,6 +17,10 @@ import {fetchRequest} from '../config/FetchUtils';
 import {SearchBar, Toast, Provider, Drawer} from "@ant-design/react-native";
 import {Actions} from "react-native-router-flux";
 import CommunalNavBar from './components/communalNavBar';
+import authentication from "./user/authentication";
+import upgradeVIP from "./upgrade/vipList";
+import setting from "./user/setting";
+import friends from "./user/friends";
 
 let pageNo = 1;//当前第几页
 let totalPage = 5;//总的页数
@@ -231,50 +235,43 @@ export default class SampleAppMovies extends Component {
                                </View>
                     </View>
                     <View style={{flexDirection: 'row', justifyContent: 'space-between', marginRight: 42,marginLeft: 42,}}>
-                        <View style={styles.sidebarUser}>
+                        <View style={styles.sidebarUser} onTouchEnd={()=>{Actions.friends()}}>
                             {/*<Image source={{uri: 'https://images.ufutx.com/201911/11/62a1dea40e7269c5610517107f628a44.png'}}*/}
                                    {/*style={styles.sidebarBack}/>*/}
                             <Text style={[styles.UserNum]}>32</Text>
                             <Text style={styles.UserTitle}>我的好友</Text>
                         </View>
-                        <View style={styles.sidebarUser}>
+                        <View style={styles.sidebarUser} onTouchEnd={()=>{Actions.fans()}}>
                             {/*<Image source={{uri: 'https://images.ufutx.com/201911/11/62a1dea40e7269c5610517107f628a44.png'}}*/}
                             {/*style={styles.sidebarBack}/>*/}
                             <Text style={[styles.UserNum]}>32</Text>
-                            <Text style={styles.UserTitle}>我的好友</Text>
+                            <Text style={styles.UserTitle}>我的关注</Text>
                         </View>
-                        <View style={styles.sidebarUser}>
+                        <View style={styles.sidebarUser} onTouchEnd={()=>{Actions.fans()}}>
                             {/*<Image source={{uri: 'https://images.ufutx.com/201911/11/62a1dea40e7269c5610517107f628a44.png'}}*/}
                             {/*style={styles.sidebarBack}/>*/}
                             <Text style={[styles.UserNum]}>32</Text>
-                            <Text style={styles.UserTitle}>我的好友</Text>
+                            <Text style={styles.UserTitle}>关注我的</Text>
                         </View>
                     </View>
                 </View>
-                <View style={styles.sidebarList}>
+                <View style={styles.sidebarList} onTouchEnd={()=>{Actions.authentication()}}>
                     <View  style={styles.sidebarBox}>
-                    <Image source={{uri: 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3699703635,816718470&fm=26&gp=0.jpg'}}
+                    <Image source={{uri: 'https://images.ufutx.com/201912/02/0fc93b5d42ed996d040e01b8e6f5424b.png'}}
                         style={styles.ItemIconStyle}/>
                         <Text style={styles.ItemTextStyle}>实名认证</Text>
                     </View>
                 </View>
-                <View style={styles.sidebarList}>
+                <View style={styles.sidebarList} onTouchEnd={()=>{Actions.upgradeVIP()}}>
                     <View  style={styles.sidebarBox}>
-                    <Image source={{uri: 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3699703635,816718470&fm=26&gp=0.jpg'}}
+                    <Image source={{uri: 'https://images.ufutx.com/201912/02/1cc2eb8c9023ef17751d366410e11e16.png'}}
                                style={styles.ItemIconStyle}/>
                         <Text style={styles.ItemTextStyle}>购买会员</Text>
                     </View>
                 </View>
-                {/*<View style={styles.sidebarList}>*/}
-                    {/*<View  style={styles.sidebarBox}>*/}
-                    {/*<Image source={{uri: 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3699703635,816718470&fm=26&gp=0.jpg'}}*/}
-                               {/*style={styles.ItemIconStyle}/>*/}
-                        {/*<Text style={styles.ItemTextStyle}>实名认证</Text>*/}
-                    {/*</View>*/}
-                {/*</View>*/}
-                <View style={styles.sidebarList}>
+                <View style={styles.sidebarList} onTouchEnd={()=>{Actions.setting()}}>
                     <View  style={styles.sidebarBox}>
-                        <Image source={{uri: 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3699703635,816718470&fm=26&gp=0.jpg'}}
+                        <Image source={{uri: 'https://images.ufutx.com/201912/02/5d645fddb4a5f61bd8b05fc496bf51bd.png'}}
                                style={styles.ItemIconStyle}/>
                         <Text style={styles.ItemTextStyle}>设置</Text>
                     </View>

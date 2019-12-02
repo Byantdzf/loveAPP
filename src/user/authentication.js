@@ -21,7 +21,7 @@ import DatePicker from 'react-native-datepicker'
 import AsyncStorage from "@react-native-community/async-storage";
 // import Basics from '../../src/user/basics'
 import CommonAvatar from '../components/commonAvatar'
-export default class vipList extends Component {
+export default class authentication extends Component {
     constructor(props) { // 初始化数据
         super(props);
         this.state = {
@@ -30,9 +30,7 @@ export default class vipList extends Component {
             score: {},
             user: {},
             feature: [],
-            explain: [],
-            sub_ranks: [],
-            abc: [{id: 'assasa'},{id:'assssssssss'}]
+            explain: []
             // sex: '男',
             // belief: '其他',
             // datetime: '1990-01-01',
@@ -72,22 +70,14 @@ export default class vipList extends Component {
         fetchRequest(`official/app/ranks?name=${this.state.type}`, 'GET')
             .then(res => {
                 let {rank, score, user} = res.data
-                let {feature, explain, sub_ranks} = rank
+                let {feature, explain} = rank
                 this.setState({
                     rank,
                     score,
                     user,
                     feature,
-                    explain,
-                    sub_ranks,
+                    explain
                 });
-                console.log(this.state.sub_ranks)
-                if(this.state.type == '黄金'){
-                    this.setState({
-                        sub_ranks: this.state.sub_ranks.splice(1,2)
-                    })
-                }
-                console.log(this.state.sub_ranks)
                 console.log(this.state.rank)
                 console.log(this.state.feature)
                 Portal.remove(loading)
@@ -116,41 +106,17 @@ export default class vipList extends Component {
     renderTab() {
         return (
             <View>
-                <View style={styles.mainTab}>
-                    <Text style={this.state.type == '市级' ? styles.active : ''} onPress={() => {
-                        this.TabBarFn('市级')
-                    }}>市级VIP</Text>
-                    <Text style={this.state.type == '黄金' ? styles.active : ''} onPress={() => {
-                        this.TabBarFn('黄金')
-                    }}>黄金VIP</Text>
-                    <Text style={this.state.type == '钻石' ? styles.active : ''} onPress={() => {
-                        this.TabBarFn('钻石')
-                    }}>钻石VIP</Text>
-                </View>
-                <View style={styles.mainBox}>
-                    {this.state.feature.map((item)=>{
-                        console.log(item)
-                        let icon = {uri: item.icon}
-                        return (
-                            <View key={item.text} style={{alignItems: 'center',marginRight: 10,marginLeft: 10, marginTop: 10,width: 86,}}>
-                                <Image source={icon} style={{width: 60,height: 60,}}/>
-                                <Text>{item.text}</Text>
-                            </View>
-                        )
-                    })}
-                </View>
-                <View style={styles.mainBox}>
-                    <Text style={{color: '#333333'}}>说明：</Text>
-                    {this.state.explain.map((item)=>{
-                        console.log(item)
-                        let icon = {uri: item.icon}
-                        return (
-                            <View key={item}>
-                                <Text style={{color: '#666666', lineHeight: 28}}>{item}</Text>
-                            </View>
-                        )
-                    })}
-                </View>
+                {/*<View style={styles.mainTab}>*/}
+                {/*    <Text style={this.state.type == '市级' ? styles.active : ''} onPress={() => {*/}
+                {/*        this.TabBarFn('市级')*/}
+                {/*    }}>市级VIP</Text>*/}
+                {/*    <Text style={this.state.type == '黄金' ? styles.active : ''} onPress={() => {*/}
+                {/*        this.TabBarFn('黄金')*/}
+                {/*    }}>黄金VIP</Text>*/}
+                {/*    <Text style={this.state.type == '钻石' ? styles.active : ''} onPress={() => {*/}
+                {/*        this.TabBarFn('钻石')*/}
+                {/*    }}>钻石VIP</Text>*/}
+                {/*</View>*/}
                 <View style={{height: 100}}></View>
             </View>
 
@@ -158,16 +124,14 @@ export default class vipList extends Component {
     }
 
     renderBtn() {
-        let sub_one = this.state.sub_ranks[0]
-        let sub_two = this.state.sub_ranks[1]
         return (
             <View style={styles.mainBtn}>
                 <View style={styles.btnStyle}>
-                    <Text style={{color: '#fff'}}>￥{sub_one?sub_one.discount_price:''} / {sub_one?sub_one.name:''}</Text>
+                    <Text style={{color: '#fff'}}>价值</Text>
                 </View>
-                <View style={{width: 2, height: 32, backgroundColor: '#fff', marginTop: 8,}}></View>
+                <View style={{width: 2,height: 32,backgroundColor: '#fff',marginTop: 8,}}></View>
                 <View style={styles.btnStyle}>
-                    <Text style={{color: '#fff'}}>￥{sub_two?sub_two.discount_price:''} / {sub_two?sub_two.name:''}</Text>
+                    <Text style={{color: '#fff'}}>寻找心仪的TA</Text>
                 </View>
             </View>
         )

@@ -32,8 +32,8 @@ function timeout_fetch(fetch_promise, timeout = 10000) {
     }, timeout);
     return abortable_promise;
 }
- // let common_url = 'https://love.ufutx.com/api/';  //服务器地址
-let common_url = 'http://love.hankin.ufutx.cn/api/';  //本地服务器地址
+ let common_url = 'https://love.ufutx.com/api/';  //服务器地址
+// let common_url = 'http://love.hankin.ufutx.cn/api/';  //本地服务器地址
 // DeviceStorage.get('token').then((res) => {
 //     if (res == null || res == '') {
 //         // setTimeout(() => {
