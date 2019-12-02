@@ -33,7 +33,8 @@ import basics from './src/user/basics'; // 基本资料
 import userData from "./src/user/data"; // 详细资料
 import friends from './src/user/friends'  // 我的好友
 import fans from './src/user/fans'  // 我的粉丝
-
+import setting from './src/user/setting'  // 我的设置
+import upgradeVIP from './src/upgrade/vipList' // 会员升级
 // const App = () => {
 //     return (
 //         <Router>
@@ -101,7 +102,7 @@ export default class App extends Component<Props> {
                            component={home}
                            title="首页"
                            hideNavBar={true}
-                           initial
+                           // initial
                     />
                     <Scene key="userDetail"
                            component={userDetail}
@@ -117,7 +118,17 @@ export default class App extends Component<Props> {
                            component={fans}
                            title="我的粉丝"
                            hideNavBar={true}
-                           // initial
+                    />
+                    <Scene key="upgradeVIP"
+                           component={upgradeVIP}
+                           title="VIP升级"
+                           hideNavBar={true}
+                           initial
+                    />
+                    <Scene key="setting"
+                           component={setting}
+                           title="设置"
+                           hideNavBar={true}
                     />
                     <Scene
                         key="gray"

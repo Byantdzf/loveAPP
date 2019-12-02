@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Image, Text, View, TouchableOpacity, StyleSheet, Dimensions, ScrollView } from 'react-native';
+import {Image, Text, View, TouchableOpacity, StyleSheet, Dimensions, ScrollView, StatusBar} from 'react-native';
 import {Actions} from "react-native-router-flux";
 import {fetchRequest} from '../config/FetchUtils';
 import {Button, InputItem, List, Toast, Provider, Modal} from '@ant-design/react-native';
@@ -198,6 +198,7 @@ export default class login extends Component {
                                 <Text style={styles.textStyle}>点击登录</Text>
                             </View>
                         </TouchableOpacity>
+                        <StatusBar translucent={false} backgroundColor='#cd274e' barStyle="light-content"/>
                     </ScrollView>
                     <Modal
                         title="温馨提示"

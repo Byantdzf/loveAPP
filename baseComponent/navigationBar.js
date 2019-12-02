@@ -5,7 +5,7 @@ import React, {Component} from 'react'
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native'
 import {commonStyle} from '../utils/commonStyle'
 import PropTypes from 'prop-types'
-import Icon from 'react-native-vector-icons/FontAwesome'
+// import Icon from 'react-native-vector-icons/FontAwesome'
 
 const barBtnWidth = 40
 const defaultNavigationBarProps = {
@@ -61,7 +61,7 @@ export default class NavigationBar extends Component {
     if (this.navigationBarProps.leftIcon) {
       let icon = this.navigationBarProps.leftIcon
       tempComponent = (
-        <Icon name={icon.name} size={icon.size} color={icon.color}/>
+        {/*<Icon name={icon.name} size={icon.size} color={icon.color}/>*/}
       )
     } else if (this.navigationBarProps.leftTitle && this.navigationBarProps.leftTitle !== '') {
       tempComponent = (
@@ -69,7 +69,7 @@ export default class NavigationBar extends Component {
       )
     } else {
       tempComponent = (
-        <Icon name='angle-left' size={25} color={commonStyle.iconGray}/>
+        {/*<Icon name='angle-left' size={25} color={commonStyle.iconGray}/>*/}
       )
     }
     return (
@@ -101,7 +101,7 @@ export default class NavigationBar extends Component {
     if (this.navigationBarProps.rightIcon) {
       let icon = this.navigationBarProps.rightIcon
       tempComponent = (
-        <Icon name={icon.name} size={icon.size} color={icon.color}/>
+        {/*<Icon name={icon.name} size={icon.size} color={icon.color}/>*/}
       )
     } else if (this.navigationBarProps.rightTitle && this.navigationBarProps.rightTitle !== '') {
       tempComponent = (
