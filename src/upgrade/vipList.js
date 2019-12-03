@@ -113,6 +113,17 @@ export default class vipList extends Component {
         })
     }
 
+    vipPay(id) {
+        let loading = Toast.loading('支付中...')
+        fetchRequest(`official/app/member/recharge?sub_rank_id=${id}`, 'POST')
+            .then(res => {
+                console.log(res)
+                Portal.remove(loading)
+            }).catch(err => {
+            console.log(`异常: ${err}`);
+        })
+    }
+
     renderTab() {
         return (
             <View>
@@ -162,11 +173,11 @@ export default class vipList extends Component {
         let sub_two = this.state.sub_ranks[1]
         return (
             <View style={styles.mainBtn}>
-                <View style={styles.btnStyle}>
+                <View style={styles.btnStyle} onTouchEnd={()=>{this.vipPay(sub_one.id)}}>
                     <Text style={{color: '#fff'}}>￥{sub_one?sub_one.discount_price:''} / {sub_one?sub_one.name:''}</Text>
                 </View>
                 <View style={{width: 2, height: 32, backgroundColor: '#fff', marginTop: 8,}}></View>
-                <View style={styles.btnStyle}>
+                <View style={styles.btnStyle} onTouchEnd={()=>{this.vipPay(sub_two.id)}}>
                     <Text style={{color: '#fff'}}>￥{sub_two?sub_two.discount_price:''} / {sub_two?sub_two.name:''}</Text>
                 </View>
             </View>
