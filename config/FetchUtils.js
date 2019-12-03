@@ -81,11 +81,10 @@ const fetchRequest = (url, method, params = '') =>{
                     .then((responseData) => {
                         console.log('res:', url, responseData);   //网络请求成功返回的数据
                         if (responseData.code == 1){
-                            Toast.info(responseData.message)
+                            // Toast.info(responseData.message)
                             Modal.alert('Sorry...', responseData.message, [
                                 { text: '好吧！', onPress: () => console.log('ok') },
                             ]);
-                            return
                         }
                         resolve(responseData);
                     })
