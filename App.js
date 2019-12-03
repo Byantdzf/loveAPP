@@ -36,6 +36,7 @@ import fans from './src/user/fans'  // 我的粉丝
 import setting from './src/user/setting'  // 我的设置
 import upgradeVIP from './src/upgrade/vipList' // 会员升级
 import authentication from './src/user/authentication' // 实名认证
+import wxPay from './src/wxPay' // 实名认证
 // const App = () => {
 //     return (
 //         <Router>
@@ -124,7 +125,7 @@ export default class App extends Component<Props> {
                            component={upgradeVIP}
                            title="VIP升级"
                            hideNavBar={true}
-                           initial
+                           // initial
                     />
                     <Scene key="authentication"
                            component={authentication}
@@ -140,6 +141,12 @@ export default class App extends Component<Props> {
                         key="gray"
                         component={GrayScreen}
                         title="Gray"
+                    />
+                    <Scene key="wxPay"
+                           component={wxPay}
+                           title="微信支付"
+                           hideNavBar={true}
+                        initial
                     />
                 </Scene>
                 {/*<Scene key="root" tabBarPosition="bottom" tabs>*/}
