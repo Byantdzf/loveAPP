@@ -33,8 +33,8 @@ function timeout_fetch(fetch_promise, timeout = 10000) {
     }, timeout);
     return abortable_promise;
 }
- // let common_url = 'https://love.ufutx.com/api/';  //服务器地址
-let common_url = 'http://love.hankin.ufutx.cn/api/';  //本地服务器地址
+ let common_url = 'https://love.ufutx.com/api/';  //服务器地址
+// let common_url = 'http://love.hankin.ufutx.cn/api/';  //本地服务器地址
 // DeviceStorage.get('token').then((res) => {
 //     if (res == null || res == '') {
 //         // setTimeout(() => {
@@ -86,6 +86,11 @@ const fetchRequest = (url, method, params = '') =>{
                                 { text: '好吧！', onPress: () => console.log('ok') },
                             ]);
                         }
+                        if (responseData.code == 2) {
+                            Toast.info(responseData.message)
+                            Actions.login()
+                            return
+                        }
                         resolve(responseData);
                     })
                     .catch((err) => {
@@ -114,13 +119,20 @@ const fetchRequest = (url, method, params = '') =>{
                     }
                 }
                 timeout_fetch(fetch(common_url + url, config)).then((response) => response.json())
-                    .then((res) => {
-                        console.log('res:', url, res);   //网络请求成功返回的数据
-                        if (res.code == 2) {
+                    .then((responseData) => {
+                        console.log('res:', url, responseData);   //网络请求成功返回的数据
+                        if (responseData.code == 1){
+                            // Toast.info(responseData.message)
+                            Modal.alert('Sorry...', responseData.message, [
+                                { text: '好吧！', onPress: () => console.log('ok') },
+                            ]);
+                        }
+                        if (responseData.code == 2) {
+                            Toast.info(responseData.message)
                             Actions.login()
                             return
                         }
-                        resolve(res);
+                        resolve(responseData);
                     })
                     .catch((err) => {
                         console.log('err:', url, err);   //网络请求失败返回的数据

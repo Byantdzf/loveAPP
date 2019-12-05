@@ -25,12 +25,10 @@ export default class authentication extends Component {
     constructor(props) { // 初始化数据
         super(props);
         this.state = {
-            type: '黄金',
-            rank: {},
-            score: {},
             user: {},
-            feature: [],
-            explain: []
+            name: '',
+            card_num: '',
+            is_approved: 0,
             // sex: '男',
             // belief: '其他',
             // datetime: '1990-01-01',
@@ -38,48 +36,48 @@ export default class authentication extends Component {
         }
     }
 
-    login() {
-        console.log()
+    approveFn() {
         if (!this.state.name){
-            Toast.offline('请填写昵称');
-            this.inputRef.focus();
+            Toast.offline('请先填写真实姓名');
             return
         }
-        // console.log(this.state.mobile.replace(/\s+/g, ""))
+        if (!this.state.card_num){
+            Toast.offline('请先填写身份证号码');
+            return
+        }
         let data = {
-            photo: this.state.avatar.uri,
             name: this.state.name,
-            sex: this.state.sex === '男'? '1': '2',
-            belief: this.state.belief,
-            birthday: this.state.datetime,
+            card_num: this.state.card_num,
         }
         console.log(data)
-        Toast.loading('保存信息中...', .8);
-        fetchRequest('official/app/user/profile', 'POST', data)
+        Toast.loading('认证中...', .8);
+        fetchRequest('official/app/user/approve', 'POST', data)
             .then(res => {
                 console.log(res)
-                Toast.success('保存成功');
-                Actions.home()
+                if (res.code == 0) {
+                    Toast.success('认证成功');
+                    this.getUser()
+                } else {
+                    Toast.info('请重试');
+                }
             }).catch(err => {
             console.log(`异常: ${err}`);
         })
     }
 
-    getList() {
+    getUser() {
         let loading = Toast.loading('加载中...')
-        fetchRequest(`official/app/ranks?name=${this.state.type}`, 'GET')
+        fetchRequest(`official/app/user`, 'GET')
             .then(res => {
-                let {rank, score, user} = res.data
-                let {feature, explain} = rank
+                let {is_approved, card_num,name} = res.data
                 this.setState({
-                    rank,
-                    score,
-                    user,
-                    feature,
-                    explain
-                });
-                console.log(this.state.rank)
-                console.log(this.state.feature)
+                    user: res.data,
+                    is_approved: is_approved,
+                    name: name,
+                    card_num: card_num
+                })
+
+                console.log(this.state.user)
                 Portal.remove(loading)
             }).catch(err => {
             console.log(`异常: ${err}`);
@@ -91,7 +89,7 @@ export default class authentication extends Component {
 
     //已经加载虚拟DOM，在render之后，只执行一次，可在此完成异步网络请求或集成其他JavaScript库
     componentDidMount() {
-        this.getList()
+        this.getUser()
     }
 
     TabBarFn(type) {
@@ -102,38 +100,54 @@ export default class authentication extends Component {
             this.getList()
         })
     }
-
+    renderBtn(){
+        let {is_approved} = this.state
+        if (is_approved == 0){
+            return(
+                <View style={styles.btnStyle} onTouchEnd={()=>{this.approveFn()}}>
+                    <Text style={{color: '#fff'}}>身份认证</Text>
+                </View>
+            )
+        }else{
+            return(
+                <Text style={{paddingTop: 12,alignSelf: 'center',color: '#d92553',fontSize: 16,fontWeight: 'bold'}}>已认证</Text>
+            )
+        }
+    }
     renderTab() {
+        let {is_approved} = this.state
         return (
             <View>
-                {/*<View style={styles.mainTab}>*/}
-                {/*    <Text style={this.state.type == '市级' ? styles.active : ''} onPress={() => {*/}
-                {/*        this.TabBarFn('市级')*/}
-                {/*    }}>市级VIP</Text>*/}
-                {/*    <Text style={this.state.type == '黄金' ? styles.active : ''} onPress={() => {*/}
-                {/*        this.TabBarFn('黄金')*/}
-                {/*    }}>黄金VIP</Text>*/}
-                {/*    <Text style={this.state.type == '钻石' ? styles.active : ''} onPress={() => {*/}
-                {/*        this.TabBarFn('钻石')*/}
-                {/*    }}>钻石VIP</Text>*/}
-                {/*</View>*/}
+                <Image resizeMode='contain' source={{uri: 'https://images.ufutx.com/201912/05/0e4615339fceb897b3163933aa87ea2f.png'}} style={styles.backPic}/>
+                <View style={styles.mainBox}>
+                    <Text style={is_approved == 1 ? styles.titleStyleA: styles.titleStyle}>{is_approved == 1 ? '已经实名认证了哦！' : '你还未实名认证！'}</Text>
+                    <TextInput
+                        style={styles.inputStyle}
+                        onChangeText={value => {
+                            this.setState({
+                                name: value,
+                            });
+                        }}
+                        editable={is_approved == 1 ? false : true}
+                        value={this.state.name}
+                        placeholder="真实姓名"
+                    />
+                    <TextInput
+                        style={styles.inputStyle}
+                        onChangeText={value => {
+                            this.setState({
+                                card_num: value,
+                            });
+                        }}
+                        editable={is_approved == 1 ? false : true}
+                        value={this.state.card_num}
+                        placeholder="身份证号"
+                    />
+                    {this.renderBtn()}
+                </View>
                 <View style={{height: 100}}></View>
             </View>
 
-        )
-    }
-
-    renderBtn() {
-        return (
-            <View style={styles.mainBtn}>
-                <View style={styles.btnStyle}>
-                    <Text style={{color: '#fff'}}>价值</Text>
-                </View>
-                <View style={{width: 2,height: 32,backgroundColor: '#fff',marginTop: 8,}}></View>
-                <View style={styles.btnStyle}>
-                    <Text style={{color: '#fff'}}>寻找心仪的TA</Text>
-                </View>
-            </View>
         )
     }
 
@@ -150,7 +164,6 @@ export default class authentication extends Component {
                         <StatusBar translucent={false} backgroundColor='#cd274e' barStyle="light-content"/>
                         {this.renderTab()}
                     </ScrollView>
-                    {this.renderBtn()}
                 </Provider>
             </View>
 
@@ -160,51 +173,57 @@ export default class authentication extends Component {
 const {width, height, scale} = Dimensions.get('window');
 const styles = StyleSheet.create({
     btnStyle: {
-        width: 180,
-        // backgroundColor: '#fff',
+        width: 120,
+        backgroundColor: '#d92553',
         color: '#666',
-        // marginTop: 22,
-        height: 52,
-        lineHeight: 52,
+        marginTop: 22,
         alignItems: 'center',
-        paddingTop: 16
-    },
-    mainBtn: {
-        width: width,
-        height: 52,
-        position: 'absolute',
-        bottom: 20,
-        left: 0,
-        backgroundColor: '#D92553',
-        flex: 1, flexDirection: 'row',
-        justifyContent: 'space-evenly',
-    },
-    active: {
-        color: '#d92553',
-        fontSize: 18,
-        fontWeight: 'bold',
-        borderBottomWidth: 2,
-        borderColor: '#d92553',
-        paddingBottom: 4
+        padding: 8,
+        alignSelf: 'center'
     },
     mainBox: {
-        // flex: 1,
+        // justifyContent: 'space-between',
+        // flexWrap: 'wrap',
+        // display:'flex',
         // flexDirection: 'row',
-        justifyContent: 'space-between',
-        flexWrap: 'wrap',
-        display:'flex',
-        flexDirection: 'row',
         marginTop: 22,
         borderColor: '#d6d6d9',
         borderWidth: 1,
-        borderRadius: 8,
+        borderRadius: 6,
         width: width*.9,
         alignSelf: 'center',
-        padding: 12,
+        padding: 22,
     },
     mainTab: {
         flex: 1, flexDirection: 'row',
         justifyContent: 'space-evenly',
         marginTop: 22,
+    },
+    backPic: {
+        width: width,
+        height: width*0.35,
+    },
+    box: {
+        width: width* 0.82,
+        alignSelf: 'center',
+        borderTopWidth: 0,
+        marginTop: 12,
+    },
+    titleStyle: {
+        color: '#d92553',
+        fontSize: 16,
+        fontWeight: 'bold'
+    },
+    titleStyleA: {
+        color: '#3c8933',
+        fontSize: 16,
+        fontWeight: 'bold'
+    },
+    inputStyle: {
+        height: 40,
+        borderColor: '#e1e1e1',
+        borderBottomWidth: 1,
+        marginTop: 12,
+        fontSize: 14,
     }
 });

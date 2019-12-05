@@ -102,7 +102,7 @@ export default class userData extends Component {
 
     //已经加载虚拟DOM，在render之后，只执行一次，可在此完成异步网络请求或集成其他JavaScript库
     componentDidMount() {
-        // console.log('componentDidMount...')
+        console.log('componentDidMount...’鞍山市所所所所所所所所所所所所所所所所所所所所所所所所所所所所所')
         AsyncStorage.getItem('token', function (error, result) {
             console.log(error,result)
         })
@@ -180,7 +180,7 @@ export default class userData extends Component {
                             </InputItem>
                         </TouchableOpacity>
                         <View style={styles.DatePickerBox}>
-                            <Text style={[styles.DatePickerText,{width: width * .2,}]}>出生日期 {dot}</Text>
+                            <Text style={[styles.DatePickerText,{width: width * .24,}]}>出生日期 {dot}</Text>
                             <View style={{flexDirection: 'row'}}>
                                 <DatePicker
                                     style={styles.dateStyle}

@@ -21,6 +21,7 @@ import DatePicker from 'react-native-datepicker'
 import AsyncStorage from "@react-native-community/async-storage";
 // import Basics from '../../src/user/basics'
 import CommonAvatar from '../components/commonAvatar'
+import WX from '../../config/wxapi'
 export default class vipList extends Component {
     constructor(props) { // 初始化数据
         super(props);
@@ -117,8 +118,12 @@ export default class vipList extends Component {
         let loading = Toast.loading('支付中...')
         fetchRequest(`official/app/member/recharge?sub_rank_id=${id}`, 'POST')
             .then(res => {
-                console.log(res)
                 Portal.remove(loading)
+                if (res.code != 0) {
+                    return
+                }
+                let {wx_pay} = res.data
+                WX.pay(wx_pay.config)
             }).catch(err => {
             console.log(`异常: ${err}`);
         })
@@ -143,9 +148,9 @@ export default class vipList extends Component {
                         console.log(item)
                         let icon = {uri: item.icon}
                         return (
-                            <View key={item.text} style={{alignItems: 'center',marginRight: 10,marginLeft: 10, marginTop: 10,width: 86,}}>
-                                <Image source={icon} style={{width: 60,height: 60,}}/>
-                                <Text>{item.text}</Text>
+                            <View key={item.text} style={{alignItems: 'center',marginRight: 6,marginLeft: 6, marginTop: 10,width: 86,}}>
+                                <Image source={icon} style={{width: 30,height: 30,}}/>
+                                <Text numberOfLines={1} style={{fontSize: 12,marginTop:8,}}>{item.text}</Text>
                             </View>
                         )
                     })}
@@ -220,7 +225,7 @@ const styles = StyleSheet.create({
         width: width,
         height: 52,
         position: 'absolute',
-        bottom: 20,
+        bottom: 16,
         left: 0,
         backgroundColor: '#D92553',
         flex: 1, flexDirection: 'row',
@@ -232,7 +237,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         borderBottomWidth: 2,
         borderColor: '#d92553',
-        paddingBottom: 4
+        paddingBottom: 4,
+        textAlign: 'center'
     },
     mainBox: {
         // flex: 1,
@@ -253,5 +259,5 @@ const styles = StyleSheet.create({
         flex: 1, flexDirection: 'row',
         justifyContent: 'space-evenly',
         marginTop: 22,
-    }
+    },
 });
