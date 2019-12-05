@@ -1,3 +1,4 @@
+
     package your.package.wxapi;
 
         import android.app.Activity;
