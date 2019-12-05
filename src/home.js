@@ -14,9 +14,13 @@ import {
     TextInput
 } from "react-native";
 import {fetchRequest} from '../config/FetchUtils';
-import {SearchBar, Toast, Provider, Drawer} from "@ant-design/react-native";
+import {SearchBar, Toast, Provider, Drawer, Portal} from "@ant-design/react-native";
 import {Actions} from "react-native-router-flux";
 import CommunalNavBar from './components/communalNavBar';
+import authentication from "./user/authentication";
+import upgradeVIP from "./upgrade/vipList";
+import setting from "./user/setting";
+import friends from "./user/friends";
 
 let pageNo = 1;//当前第几页
 let totalPage = 5;//总的页数
@@ -28,6 +32,7 @@ export default class SampleAppMovies extends Component {
             data: [],
             list: [],
             page: 1,
+            user: {},
             keyword: '',
             showList: true,
             loaded: false,
@@ -40,6 +45,8 @@ export default class SampleAppMovies extends Component {
             loading: true,
             showFoot: 0, // 控制foot， 0：隐藏footer  1：已加载完成,没有更多数据   2 ：显示加载中
             isRefreshing: false,//下拉控制
+            avatar: {uri: 'https://images.ufutx.com/201911/20/f936c7bcd8805d1f0db3743c5c157601.png'}
+
         };
         // 在ES6中，如果在自定义的函数里使用了this关键字，则需要对其进行“绑定”操作，否则this的指向会变为空
         // 像下面这行代码一样，在constructor中使用bind是其中一种做法（还有一些其他做法，如使用箭头函数等）
@@ -60,6 +67,22 @@ export default class SampleAppMovies extends Component {
     componentDidMount() {
         pageNo = 1
         this.fetchData(pageNo);
+        this.getUser()
+    }
+    getUser() {
+        let loading = Toast.loading('加载中...')
+        fetchRequest(`official/app/user`, 'GET')
+            .then(res => {
+                let {is_approved, card_num,name,photo} = res.data
+                this.setState({
+                    user: res.data,
+                    avatar: {uri: photo?photo:'https://images.ufutx.com/201912/05/3b5bf7522fe585342d56d44eebeb3412.jpeg'}
+                })
+                console.log(this.state.user)
+                Portal.remove(loading)
+            }).catch(err => {
+            console.log(`异常: ${err}`);
+        })
     }
 
     fetchData(pageNo) {
@@ -114,10 +137,12 @@ export default class SampleAppMovies extends Component {
 
     // 返回左边按钮
     renderLeftItem() {
+        let {photo} = this.state.user?this.state.user:'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3699703635,816718470&fm=26&gp=0.jpg'
+        console.log(photo)
         return (
             <TouchableOpacity onPress={() => this.drawer && this.drawer.openDrawer()}>
                 <Image
-                    source={{uri: 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3699703635,816718470&fm=26&gp=0.jpg'}}
+                    source={this.state.avatar}
                     style={styles.navbarLeftItemStyle}/>
             </TouchableOpacity>
         );
@@ -222,59 +247,57 @@ export default class SampleAppMovies extends Component {
                         <Image source={{uri: 'https://images.ufutx.com/201911/11/ef443905239d29665d4976264d51bbab.png'}}
                                style={styles.sidebarBack}/>
                     </TouchableOpacity>
-                    <View style={{flexDirection: 'row'}}>
-                        <Image source={{uri: 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3699703635,816718470&fm=26&gp=0.jpg'}}
+                    <View style={{flexDirection: 'row'}} onTouchEnd={()=>{Actions.userData()}}>
+                        <Image source={this.state.avatar}
                                style={styles.sidebarPic}/>
                                <View style={styles.sidebarUser}>
-                                   <Text style={{color: '#fff'}}>AngelaBaby</Text>
+                                   <Text style={{color: '#fff'}}>{this.state.user.name}</Text>
                                    <Text style={styles.UserInfoEdit}>编辑资料</Text>
                                </View>
                     </View>
                     <View style={{flexDirection: 'row', justifyContent: 'space-between', marginRight: 42,marginLeft: 42,}}>
-                        <View style={styles.sidebarUser}>
+                        <View style={styles.sidebarUser} onTouchEnd={()=>{Actions.friends()}}>
                             {/*<Image source={{uri: 'https://images.ufutx.com/201911/11/62a1dea40e7269c5610517107f628a44.png'}}*/}
                                    {/*style={styles.sidebarBack}/>*/}
-                            <Text style={[styles.UserNum]}>32</Text>
+                            <Text style={[styles.UserNum]}>{this.state.user.friend_count}</Text>
                             <Text style={styles.UserTitle}>我的好友</Text>
                         </View>
-                        <View style={styles.sidebarUser}>
+                        <View style={styles.sidebarUser} onTouchEnd={()=>{Actions.fans()}}>
                             {/*<Image source={{uri: 'https://images.ufutx.com/201911/11/62a1dea40e7269c5610517107f628a44.png'}}*/}
                             {/*style={styles.sidebarBack}/>*/}
-                            <Text style={[styles.UserNum]}>32</Text>
-                            <Text style={styles.UserTitle}>我的好友</Text>
+                            <Text style={[styles.UserNum]}>{this.state.user.follow_count}</Text>
+                            <Text style={styles.UserTitle}>我的关注</Text>
                         </View>
-                        <View style={styles.sidebarUser}>
+                        <View style={styles.sidebarUser} onTouchEnd={()=>{Actions.fans()}}>
                             {/*<Image source={{uri: 'https://images.ufutx.com/201911/11/62a1dea40e7269c5610517107f628a44.png'}}*/}
                             {/*style={styles.sidebarBack}/>*/}
-                            <Text style={[styles.UserNum]}>32</Text>
-                            <Text style={styles.UserTitle}>我的好友</Text>
+                            <Text style={[styles.UserNum]}>{this.state.user.fans_count}</Text>
+                            <Text style={styles.UserTitle}>关注我的</Text>
                         </View>
                     </View>
                 </View>
-                <View style={styles.sidebarList}>
-                    <View  style={styles.sidebarBox}>
-                    <Image source={{uri: 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3699703635,816718470&fm=26&gp=0.jpg'}}
-                        style={styles.ItemIconStyle}/>
+                <View style={styles.sidebarList} onTouchEnd={() => {
+                    Actions.authentication()
+                }}>
+                    <View style={styles.sidebarBox}>
+                        <Image source={{uri: 'https://images.ufutx.com/201912/02/0fc93b5d42ed996d040e01b8e6f5424b.png'}}
+                               style={styles.ItemIconStyle}/>
                         <Text style={styles.ItemTextStyle}>实名认证</Text>
+                        {this.state.user.is_approved == 1 ? <Text style={[styles.ItemRightStyle,{color: '#d92553'}]}>已认证</Text> : <Text style={styles.ItemRightStyle}>未认证</Text>}
                     </View>
                 </View>
-                <View style={styles.sidebarList}>
-                    <View  style={styles.sidebarBox}>
-                    <Image source={{uri: 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3699703635,816718470&fm=26&gp=0.jpg'}}
+                <View style={styles.sidebarList} onTouchEnd={() => {
+                    Actions.upgradeVIP()
+                }}>
+                    <View style={styles.sidebarBox}>
+                        <Image source={{uri: 'https://images.ufutx.com/201912/02/1cc2eb8c9023ef17751d366410e11e16.png'}}
                                style={styles.ItemIconStyle}/>
                         <Text style={styles.ItemTextStyle}>购买会员</Text>
                     </View>
                 </View>
-                {/*<View style={styles.sidebarList}>*/}
-                    {/*<View  style={styles.sidebarBox}>*/}
-                    {/*<Image source={{uri: 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3699703635,816718470&fm=26&gp=0.jpg'}}*/}
-                               {/*style={styles.ItemIconStyle}/>*/}
-                        {/*<Text style={styles.ItemTextStyle}>实名认证</Text>*/}
-                    {/*</View>*/}
-                {/*</View>*/}
-                <View style={styles.sidebarList}>
+                <View style={styles.sidebarList} onTouchEnd={()=>{Actions.setting()}}>
                     <View  style={styles.sidebarBox}>
-                        <Image source={{uri: 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3699703635,816718470&fm=26&gp=0.jpg'}}
+                        <Image source={{uri: 'https://images.ufutx.com/201912/02/5d645fddb4a5f61bd8b05fc496bf51bd.png'}}
                                style={styles.ItemIconStyle}/>
                         <Text style={styles.ItemTextStyle}>设置</Text>
                     </View>
@@ -329,7 +352,7 @@ export default class SampleAppMovies extends Component {
     }
 
     _separator() {
-        return <View style={{height: 1, backgroundColor: '#999999'}}/>;
+        return <View style={{height: 6, backgroundColor: '#f5f6f9'}}/>;
     }
 
     _onEndReached() {
@@ -529,7 +552,7 @@ const styles = StyleSheet.create({
     },
     sidebarUser: {
         flexDirection: 'column',
-        marginTop: 8,
+        marginTop: 3,
     },
     UserInfoEdit:{
         color: '#fff',
@@ -546,7 +569,7 @@ const styles = StyleSheet.create({
     },
     UserTitle: {
         color: '#fff',
-        borderBottomWidth: 1,
+        // borderBottomWidth: 1,
         borderColor: '#fff',
         fontSize: 12,
         textAlign: 'center',
@@ -588,4 +611,9 @@ const styles = StyleSheet.create({
         marginLeft: 6,
         marginTop: 4,
     },
+    ItemRightStyle: {
+        fontSize: 12,
+        marginLeft: width*.48,
+        marginTop: 7,
+    }
 });

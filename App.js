@@ -33,7 +33,11 @@ import basics from './src/user/basics'; // 基本资料
 import userData from "./src/user/data"; // 详细资料
 import friends from './src/user/friends'  // 我的好友
 import fans from './src/user/fans'  // 我的粉丝
-
+import setting from './src/user/setting'  // 我的设置
+import upgradeVIP from './src/upgrade/vipList' // 会员升级
+import authentication from './src/user/authentication' // 实名认证
+import wxPay from './src/wxPay'
+import * as WeChat from "react-native-wechat"; // 微信测试
 // const App = () => {
 //     return (
 //         <Router>
@@ -57,6 +61,9 @@ import fans from './src/user/fans'  // 我的粉丝
 
 type Props = {};
 export default class App extends Component<Props> {
+    componentDidMount() {
+        WeChat.registerApp('wx2aa846fb62df72c9');
+    }
     render() {
         return (
             <Router>
@@ -73,13 +80,12 @@ export default class App extends Component<Props> {
                            title="启动页"
                            hideNavBar={true}
                            // initial
-                           initial
                     />
                     <Scene key="login"
                            component={login}
                            title="登录"
                            hideNavBar={true}
-                           // initial
+                           initial
                     />
                     <Scene
                         key="protocol"
@@ -101,7 +107,7 @@ export default class App extends Component<Props> {
                            component={home}
                            title="首页"
                            hideNavBar={true}
-                           initial
+                           // initial
                     />
                     <Scene key="userDetail"
                            component={userDetail}
@@ -117,13 +123,35 @@ export default class App extends Component<Props> {
                            component={fans}
                            title="我的粉丝"
                            hideNavBar={true}
+                    />
+                    <Scene key="upgradeVIP"
+                           component={upgradeVIP}
+                           title="VIP升级"
+                           hideNavBar={true}
                            // initial
+                    />
+                    <Scene key="authentication"
+                           component={authentication}
+                           title="实名认证"
+                           hideNavBar={true}
+                           // initial
+                    />
+                    <Scene key="setting"
+                           component={setting}
+                           title="设置"
+                           hideNavBar={true}
+                    />
+                    <Scene key="wxPay"
+                           component={wxPay}
+                           title="微信测试"
+                           hideNavBar={true}
                     />
                     <Scene
                         key="gray"
                         component={GrayScreen}
                         title="Gray"
                     />
+
                 </Scene>
                 {/*<Scene key="root" tabBarPosition="bottom" tabs>*/}
                 {/*<Scene hideBackImage*/}

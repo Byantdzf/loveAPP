@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import {Image, Text, View, TouchableOpacity, StyleSheet, Dimensions, ScrollView } from 'react-native';
+import {Image, Text, View, TouchableOpacity, StyleSheet, Dimensions, ScrollView, StatusBar} from 'react-native';
 import {Actions} from "react-native-router-flux";
 import {fetchRequest} from '../config/FetchUtils';
-import {Button, InputItem, List, Toast, Provider, Modal} from '@ant-design/react-native';
+import {Button, InputItem, List, Toast, Provider, Modal, Portal} from '@ant-design/react-native';
 // import DeviceStorage from '../config/DeviceStorage';
 import AsyncStorage from "@react-native-community/async-storage";
 
@@ -95,10 +95,12 @@ export default class login extends Component {
             mobile: this.state.mobile.replace(/\s+/g, ""),
             code: this.state.code
         }
-        Toast.loading('登录中...', .6);
+        let loading = Toast.loading('登录中...')
         fetchRequest('official/app/login', 'POST', data)
             .then(res => {
                 console.log(res)
+                Portal.remove(loading)
+
                 if (res.code == 1){
                     Toast.offline(res.message);
                     this.inputRef.focus();
@@ -110,6 +112,7 @@ export default class login extends Component {
                         if (error) {
                             console.log('存储失败');
                         } else {
+                            console.log('存储成功');
                             Actions.basics()
                         }
                     })
@@ -198,6 +201,7 @@ export default class login extends Component {
                                 <Text style={styles.textStyle}>点击登录</Text>
                             </View>
                         </TouchableOpacity>
+                        <StatusBar translucent={false} backgroundColor='#cd274e' barStyle="light-content"/>
                     </ScrollView>
                     <Modal
                         title="温馨提示"
