@@ -8,6 +8,7 @@ import base64 from 'react-native-base64'
 import * as WeChat from 'react-native-wechat'
 class OButton extends Component {
     render() {
+        
         return (
             <TouchableHighlight
                 style={styles.button}
