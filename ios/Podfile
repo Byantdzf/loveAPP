@@ -40,7 +40,8 @@ target 'loveAPP' do
 
   pod 'RCTWeChat', :path => '../node_modules/react-native-wechat'
 
-  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
+  pod 'RNImageCropPicker', :path => '../node_modules/react-native-image-crop-picker'
 
   target 'loveAPPTests' do
     inherit! :search_paths

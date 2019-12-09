@@ -61,9 +61,6 @@ import * as WeChat from "react-native-wechat"; // 微信测试
 
 type Props = {};
 export default class App extends Component<Props> {
-    componentDidMount() {
-        WeChat.registerApp('wx2aa846fb62df72c9');
-    }
     render() {
         return (
             <Router>
