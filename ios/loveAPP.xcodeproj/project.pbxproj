@@ -5,6 +5,7 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* loveAPPTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* loveAPPTests.m */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
@@ -17,6 +18,7 @@
 		2DCD954D1E0B4F2C00145EB5 /* loveAPPTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* loveAPPTests.m */; };
 		3978C65E75A14C91BE516440 /* antoutline.ttf in Resources */ = {isa = PBXBuildFile; fileRef = ED6888389B78468AAAA92996 /* antoutline.ttf */; };
 		56765D4FCD0AADE12CAF3D08 /* libPods-loveAPPTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BAC9AE1F43CA789E5432D3A /* libPods-loveAPPTests.a */; };
+		9C67BBDA239FAB9100C322F4 /* antfill.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D2B8C5778A4744159F852AE8 /* antfill.ttf */; };
 		9CEEC14923992F0500095CAD /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CEEC14823992F0500095CAD /* CoreTelephony.framework */; };
 		9CEEC14B23992F1E00095CAD /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CEEC14A23992F1E00095CAD /* SystemConfiguration.framework */; };
 		9CEEC14D23992F7D00095CAD /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CEEC14C23992F7D00095CAD /* libz.tbd */; };
@@ -375,6 +377,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C67BBDA239FAB9100C322F4 /* antfill.ttf in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				3978C65E75A14C91BE516440 /* antoutline.ttf in Resources */,
