@@ -135,28 +135,30 @@ export default class friends extends Component {
 
     renderData() {
         return (
-            <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
-                <View style={{alignSelf: 'center'}} onTouchEnd={()=>{this.logout()}}>
-                    <Text style={styles.logout}>退出登录</Text>
-                </View>
+            <SafeAreaView style={{flex: 1, backgroundColor: '#d92553'}}>
+                <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
+                    <View style={{alignSelf: 'center'}} onTouchEnd={()=>{this.logout()}}>
+                        <Text style={styles.logout}>退出登录</Text>
+                    </View>
                     {/*<View style={styles.containerv}>*/}
-                        {/*<CommunalNavBar*/}
-                            {/*titleItem={() => this.renderTitleItem()}*/}
-                        {/*/>*/}
+                    {/*<CommunalNavBar*/}
+                    {/*titleItem={() => this.renderTitleItem()}*/}
+                    {/*/>*/}
                     {/*</View>*/}
                     {/*<Provider>*/}
-                        {/*<FlatList*/}
-                            {/*data={this.state.list}*/}
-                            {/*renderItem={this.renderMovie}*/}
-                            {/*style={styles.list}*/}
-                            {/*keyExtractor={(item, index) => index.toString()}*/}
-                            {/*ListFooterComponent={this._renderFooter.bind(this)}*/}
-                            {/*onEndReached={this._onEndReached.bind(this)}*/}
-                            {/*onEndReachedThreshold={1}*/}
-                            {/*ItemSeparatorComponent={this._separator}*/}
-                        {/*/>*/}
+                    {/*<FlatList*/}
+                    {/*data={this.state.list}*/}
+                    {/*renderItem={this.renderMovie}*/}
+                    {/*style={styles.list}*/}
+                    {/*keyExtractor={(item, index) => index.toString()}*/}
+                    {/*ListFooterComponent={this._renderFooter.bind(this)}*/}
+                    {/*onEndReached={this._onEndReached.bind(this)}*/}
+                    {/*onEndReachedThreshold={1}*/}
+                    {/*ItemSeparatorComponent={this._separator}*/}
+                    {/*/>*/}
                     {/*</Provider>*/}
                     {/*<StatusBar translucent={false} backgroundColor='#D92553' barStyle="light-content"/>*/}
+                </SafeAreaView>
             </SafeAreaView>
         );
     }
@@ -515,13 +517,16 @@ const styles = StyleSheet.create({
         borderWidth: 1,
     },
     logout:{
-        width: width * 0.8,
-        height: 50,
-        lineHeight: 50,
-        backgroundColor: '#D92553',
+        width: width * 0.4,
+        height: 36,
+        lineHeight: 36,
+        // backgroundColor: '#D92553',
         textAlign: 'center',
         fontSize: 18,
-        color: '#ffffff',
-        marginTop: 22,
+        color: '#d92553',
+        borderRadius: 4,
+        borderWidth: 1,
+        borderColor: '#d92553',
+        marginTop: 72
     }
 });
