@@ -10,7 +10,7 @@ import {
     TextInput,
     DatePickerIOS,
     ScrollView,
-    StatusBar
+    StatusBar, SafeAreaView
 } from 'react-native';
 import {Actions} from "react-native-router-flux";
 import {fetchRequest} from '../../config/FetchUtils';
@@ -450,6 +450,9 @@ export default class userData extends Component {
     renderUserData() {
         let codeIcon = {uri: 'https://images.ufutx.com/201910/17/70c4a203145a1bbc535b0524a5133bee.png'};
         let rightIcon = <Image source={codeIcon} style={styles.icon}/>
+        let introduction = this.state.introduction.substring(0, 8);
+        let ideal_mate = this.state.ideal_mate.substring(0, 8);
+
         return (
             <View style={{backgroundColor: '#ffffff',}}>
                 <View style={styles.line}></View>
@@ -677,7 +680,7 @@ export default class userData extends Component {
                         }}>
                             <InputItem
                                 textAlign='end'
-                                value={this.state.ideal_mate+'...'}
+                                value={ideal_mate+'...'}
                                 style={styles.InputItemStyle}
                                 editable={false}
                                 placeholder="个人介绍"
@@ -695,11 +698,11 @@ export default class userData extends Component {
                         }}>
                             <InputItem
                                 textAlign='end'
-                                value={this.state.introduction+'...'}
+                                value={introduction+'...'}
                                 style={styles.InputItemStyle}
                                 editable={false}
                                 placeholder="理想对象"
-                                maxLength={12}
+                                maxLength= {12}
                                 extra={rightIcon}
                             >
                                 理想对象
@@ -729,37 +732,39 @@ export default class userData extends Component {
 
     render() {
         return (
-            <Drawer
-                sidebar={this.renderSidebar()}
-                position="right"
-                open={false}
-                drawerRef={el => (this.drawer = el)}
-                onOpenChange={this.onOpenChange}
-                drawerBackgroundColor="#fff"
-                open={this.state.visible}
-                drawerWidth={width}
-            >
-                <View style={{backgroundColor: "#fff", height: height,}}>
-                    {/*<Basics></Basics>*/}
-                    <Provider>
-                        <CommonAvatar ref='app' getImagePath={this.getImagePath.bind(this)}></CommonAvatar>
-                        <ScrollView
-                            keyboardDismissMode="on-drag"
-                            keyboardShouldPersistTaps='always'>
-                            {/*状态栏*/}
-                            <StatusBar translucent={false} backgroundColor='#cd274e' barStyle="light-content"/>
-                            {/*头像*/}
-                            {this.renderAvatar()}
-                            {/*基本信息*/}
-                            {this.renderBasice()}
-                            {/*详细信息*/}
-                            {this.renderUserData()}
-                            {/*保存按钮*/}
-                            {this.renderBtn()}
-                        </ScrollView>
-                    </Provider>
-                </View>
-            </Drawer>
+            <SafeAreaView style={{flex: 1, backgroundColor: '#d92553'}}>
+                <Drawer
+                    sidebar={this.renderSidebar()}
+                    position="right"
+                    open={false}
+                    drawerRef={el => (this.drawer = el)}
+                    onOpenChange={this.onOpenChange}
+                    drawerBackgroundColor="#fff"
+                    open={this.state.visible}
+                    drawerWidth={width}
+                >
+                    <View style={{backgroundColor: "#fff", height: height,}}>
+                        {/*<Basics></Basics>*/}
+                        <Provider>
+                            <CommonAvatar ref='app' getImagePath={this.getImagePath.bind(this)}></CommonAvatar>
+                            <ScrollView
+                                keyboardDismissMode="on-drag"
+                                keyboardShouldPersistTaps='always'>
+                                {/*状态栏*/}
+                                <StatusBar translucent={false} backgroundColor='#cd274e' barStyle="light-content"/>
+                                {/*头像*/}
+                                {this.renderAvatar()}
+                                {/*基本信息*/}
+                                {this.renderBasice()}
+                                {/*详细信息*/}
+                                {this.renderUserData()}
+                                {/*保存按钮*/}
+                                {this.renderBtn()}
+                            </ScrollView>
+                        </Provider>
+                    </View>
+                </Drawer>
+            </SafeAreaView>
 
         );
     }

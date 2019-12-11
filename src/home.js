@@ -181,7 +181,7 @@ export default class SampleAppMovies extends Component {
                    style={styles.refreshIcon}/>
             : <ActivityIndicator size="large" color="#D92553"/>;
         return (
-            <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
+            <SafeAreaView style={{flex: 1, backgroundColor: '#d92553'}}>
                 <Drawer
                     sidebar={this.sidebar()}
                     position="left"
@@ -219,7 +219,7 @@ export default class SampleAppMovies extends Component {
                         </View>
                         {/*</TouchableOpacity>*/}
                     </Provider>
-                    <StatusBar translucent={false} backgroundColor='#D92553' barStyle="light-content"/>
+                    <StatusBar  translucent={false} backgroundColor='#D92553' barStyle="light-content"/>
                 </Drawer>
             </SafeAreaView>
         );
@@ -449,10 +449,12 @@ const styles = StyleSheet.create({
         height: 50,
         backgroundColor: '#fff',
         borderRadius: 50,
-        shadowColor: '#D92553',
-        shadowOffset: {width: 0, height: 0},
-        shadowOpacity: 22,
-        shadowRadius: 22,
+        // shadowColor: '#D92553',
+        // shadowOffset: {width: 0, height: 0},
+        // shadowOpacity: 22,
+        // shadowRadius: 22,
+        borderColor: '#d6d6d6',
+        borderWidth: 2,
         flex: 1,
         flexDirection: "row",
         justifyContent: "center",
@@ -561,7 +563,7 @@ const styles = StyleSheet.create({
         fontSize: 12,
         marginTop: 8,
         textAlign: 'center',
-        borderRadius: 12,
+        borderRadius: 8,
         paddingLeft: 6,
         paddingRight: 6,
         paddingTop: 2,

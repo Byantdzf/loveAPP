@@ -10,7 +10,7 @@ import {
     TextInput,
     DatePickerIOS,
     ScrollView,
-    StatusBar
+    StatusBar, SafeAreaView
 } from 'react-native';
 import {Actions} from "react-native-router-flux";
 import {fetchRequest} from '../../config/FetchUtils';
@@ -191,21 +191,21 @@ export default class vipList extends Component {
 
     render() {
         return (
-
-            <View style={{backgroundColor: "#fff", height: height,}}>
-                {/*<Basics></Basics>*/}
-                <Provider>
-                    <ScrollView
-                        keyboardDismissMode="on-drag"
-                        keyboardShouldPersistTaps='always'>
-                        {/*状态栏*/}
-                        <StatusBar translucent={false} backgroundColor='#cd274e' barStyle="light-content"/>
-                        {this.renderTab()}
-                    </ScrollView>
-                    {this.renderBtn()}
-                </Provider>
-            </View>
-
+            <SafeAreaView style={{flex: 1, backgroundColor: '#d92553'}}>
+                <View style={{backgroundColor: "#fff", height: height,}}>
+                    {/*<Basics></Basics>*/}
+                    <Provider>
+                        <ScrollView
+                            keyboardDismissMode="on-drag"
+                            keyboardShouldPersistTaps='always'>
+                            {/*状态栏*/}
+                            <StatusBar translucent={false} backgroundColor='#cd274e' barStyle="light-content"/>
+                            {this.renderTab()}
+                        </ScrollView>
+                        {this.renderBtn()}
+                    </Provider>
+                </View>
+            </SafeAreaView>
         );
     }
 }

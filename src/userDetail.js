@@ -1,7 +1,19 @@
 
 import React, { Component } from "react";
 
-import { Image, FlatList, StyleSheet, Text, View, Dimensions, TouchableOpacity, ScrollView, ActivityIndicator, Linking} from "react-native";
+import {
+    Image,
+    FlatList,
+    StyleSheet,
+    Text,
+    View,
+    Dimensions,
+    TouchableOpacity,
+    ScrollView,
+    ActivityIndicator,
+    Linking,
+    SafeAreaView
+} from "react-native";
 import {fetchRequest} from '../config/FetchUtils';
 import {Toast, Provider, Carousel, Modal, List} from "@ant-design/react-native";
 import {Actions} from "react-native-router-flux";
@@ -203,115 +215,123 @@ export default class SampleAppMovies extends Component {
             <Image source={man} style={[styles.iconStyle]}/> :
             <Image source={woman} style={[styles.iconStyle]}/>;
         return (
-            <View style={{backgroundColor: "#fff", minHeight: height,}}>
-                <ScrollView>
-                    <View>
-                        <Carousel
-                            style={styles.wrapper}
-                            selectedIndex={2}
-                            autoplay
-                            infinite
-                            afterChange={this.onHorizontalSelectedIndexChange}
-                        >
-                            {/* 方式1 */}
-                            {/*{items.map((item) => {*/}
+            <SafeAreaView style={{flex: 1, backgroundColor: '#d92553'}}>
+                <View style={{backgroundColor: "#fff", minHeight: height,}}>
+                    <ScrollView>
+                        <View>
+                            <Carousel
+                                selectedIndex={0}
+                                autoplay
+                                // infinite
+                                bounces
+                                afterChange={this.onHorzontalSelectedIndexChange}
+                            >
+                                {/* 方式1 */}
+                                {/*{items.map((item) => {*/}
                                 {/*return (*/}
-                                    {/*<Text>{item}</Text>*/}
+                                {/*<Text>{item}</Text>*/}
                                 {/*);*/}
-                            {/*})}*/}
-                            {/* 方式2 */}
-                            {/* {items.map((item) => this.textComponent(item))} */}
-                            {items.map((item, index) => {
-                                return (
-                                    <Image
-                                        key={index}
-                                        source={item}
-                                        id={index}
-                                        style={[styles.thumbnail,{width: width, height: width}]}
-                                    />
-                                );
-                            })}
-                        </Carousel>
-                    </View>
-                    <View style={{
-                        flexDirection: "row",
-                        justifyContent: "flex-end",
-                        marginTop: -32,
-                        marginRight: 12
-                    }}>
-                        <Image source={likeIcon} style={[{width: 72, height: 72,}]}/>
-                    </View>
-                    <View style={styles.containerText}>
-                        <View style={{flexDirection: "row", justifyContent: "flex-start",alignItems: 'center', flex: 1,}}>
-                            <Text style={{marginLeft: 8,fontSize: 16}}>{user.name}</Text>
-                            {iconText}
+                                {/*})}*/}
+                                {/* 方式2 */}
+                                {/* {items.map((item) => this.textComponent(item))} */}
+                                {items.map((item, index) => {
+                                    return (
+                                        <Image
+                                            key={index}
+                                            source={item}
+                                            id={index}
+                                            resizeMode='cover'
+                                            style={[styles.thumbnail,{width: width, height: width}]}
+                                        />
+                                    );
+                                })}
+                            </Carousel>
                         </View>
-                        <Text style={{marginRight: 4,marginTop: 4,color: '#97979f',fontSize: 12}}>{user.login_time_str}活跃</Text>
-                    </View>
-                    <View style={[styles.containerText,{marginTop: 0}]}>
-                        <Text style={{marginLeft: 8,color: '#97979f',fontSize: 12}}>
-                            {user.age} {user.profile_courtship.stature+'cm'} {user.industry}/{user.industry_sub}
-                        </Text>
-                        <TouchableOpacity onPress={() => this.setState({ visible: true })}>
-                            <Image source={{uri: 'https://images.ufutx.com/201910/29/50d3b52c4902ca02755a596cbcefb8d7.png'}} style={[{width: 22, height: 12,marginRight: 6,marginTop: 2,}]}/>
-                        </TouchableOpacity>
-                    </View>
-                    <View style={[styles.dotStyle,{width: width}]}></View>
-                    <View style={[styles.containerText,{marginTop: 12}]}>
-                        <Text style={{marginLeft: 8,fontSize: 16}}>个人资料</Text>
-                    </View>
-                    <View style={[styles.containerText,{marginTop: -4}]}>
-                        {this.userBasics()}
-                    </View>
-                    <View style={[styles.dotStyle2]}>{/*横线*/}</View>
-                    <View style={[styles.containerText,{marginTop: 12}]}>
-                        <Text style={{marginLeft: 8,fontSize: 16}}>个人介绍</Text>
-                    </View>
-                    <View style={[styles.containerText,{marginTop: -4}]}>
-                        <Text style={styles.TextStyle}>{user.profile_courtship.introduction}</Text>
-                    </View>
-                    <View style={[styles.dotStyle2]}>{/*横线*/}</View>
-                    <View style={[styles.containerText,{marginTop: 12}]}>
-                        <Text style={{marginLeft: 8,fontSize: 16}}>择偶意向</Text>
-                    </View>
-                    <View style={[styles.containerText,{marginTop: -4}]}>
-                        <Text style={styles.TextStyle}>{user.profile_courtship.ideal_mate}</Text>
-                    </View>
-                    <View style={[styles.dotStyle2]}>{/*横线*/}</View>
-                    <View style={[styles.containerText,{marginTop: 12}]}>
-                        <Text style={{marginLeft: 8,fontSize: 16}}>Ta的认证</Text>
-                    </View>
-                    {this.userApproved()}
-                    <View style={{height: 100}}>{/*占位*/}</View>
-                    {this.renderBtn()}
-                </ScrollView>
-                <ActionButton buttonColor="#D92553" offsetX={34} offsetY={100}>
-                    <ActionButton.Item buttonColor='rgba(231,76,60,0)' title="主页" onPress={() => Actions.home()}>
-                        <Image
-                            source={{uri: 'https://images.ufutx.com/201910/22/44641052ec087246a15e8551df3adfac.png'}}
-                            style={[styles.thumbnail,{width: 80, height: 80,marginTop: 12}]}
-                        />
-                    </ActionButton.Item>
-                    <ActionButton.Item buttonColor='rgba(231,76,60,0)' title="帮我联系Ta" onPress={this.callMerchant}>
-                        <Image
-                            source={{uri: 'https://images.ufutx.com/201910/22/54a015f92ad58f0583f163c334782c24.png'}}
-                            style={[styles.thumbnail,{width: 80, height: 80,marginTop: 12}]}
-                        />
-                    </ActionButton.Item>
-                </ActionButton>
-                <Modal
-                    popup
-                    visible={this.state.visible}
-                    animationType="slide-up"
-                    onClose={this.onClose}
-                >
-                    <View style={{ }}>
-                        <Text style={[styles.ModalItem]} onPress={this.report}>举报</Text>
-                        <Text style={[styles.ModalItem, {borderBottomColor: '#f6f6f6', borderBottomWidth: 6,}]} onPress={this.shieldFn}>拉黑</Text>
-                        <Text style={[styles.ModalItem, {borderBottomWidth: 0}]} onPress={this.onClose}>取消</Text>
-                    </View>
-                </Modal>
-            </View>
+                        <View style={{
+                            flexDirection: "row",
+                            justifyContent: "flex-end",
+                            marginTop: -46,
+                            marginRight: 12,
+                            marginBottom: -16
+                        }} onTouchEnd={()=>{
+                            this.setState({
+                                isLike: !this.state.isLike
+                            })
+                        }}>
+                            <Image source={likeIcon} style={[{width: 72, height: 72,}]}/>
+                        </View>
+                        <View style={styles.containerText}>
+                            <View style={{flexDirection: "row", justifyContent: "flex-start",alignItems: 'center', flex: 1,}}>
+                                <Text style={{marginLeft: 8,fontSize: 16}}>{user.name}</Text>
+                                {iconText}
+                            </View>
+                            <Text style={{marginRight: 4,marginTop: 4,color: '#97979f',fontSize: 12}}>{user.login_time_str}活跃</Text>
+                        </View>
+                        <View style={[styles.containerText,{marginTop: 0}]}>
+                            <Text style={{marginLeft: 8,color: '#97979f',fontSize: 12}}>
+                                {user.age} {user.profile_courtship.stature+'cm'} {user.industry}/{user.industry_sub}
+                            </Text>
+                            <TouchableOpacity onPress={() => this.setState({ visible: true })}>
+                                <Image source={{uri: 'https://images.ufutx.com/201910/29/50d3b52c4902ca02755a596cbcefb8d7.png'}} style={[{width: 22, height: 12,marginRight: 6,marginTop: 2,}]}/>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={[styles.dotStyle,{width: width}]}></View>
+                        <View style={[styles.containerText,{marginTop: 12}]}>
+                            <Text style={{marginLeft: 8,fontSize: 16}}>个人资料</Text>
+                        </View>
+                        <View style={[styles.containerText,{marginTop: -4}]}>
+                            {this.userBasics()}
+                        </View>
+                        <View style={[styles.dotStyle2]}>{/*横线*/}</View>
+                        <View style={[styles.containerText,{marginTop: 12}]}>
+                            <Text style={{marginLeft: 8,fontSize: 16}}>个人介绍</Text>
+                        </View>
+                        <View style={[styles.containerText,{marginTop: -4}]}>
+                            <Text style={styles.TextStyle}>{user.profile_courtship.introduction}</Text>
+                        </View>
+                        <View style={[styles.dotStyle2]}>{/*横线*/}</View>
+                        <View style={[styles.containerText,{marginTop: 12}]}>
+                            <Text style={{marginLeft: 8,fontSize: 16}}>择偶意向</Text>
+                        </View>
+                        <View style={[styles.containerText,{marginTop: -4}]}>
+                            <Text style={styles.TextStyle}>{user.profile_courtship.ideal_mate}</Text>
+                        </View>
+                        <View style={[styles.dotStyle2]}>{/*横线*/}</View>
+                        <View style={[styles.containerText,{marginTop: 12}]}>
+                            <Text style={{marginLeft: 8,fontSize: 16}}>Ta的认证</Text>
+                        </View>
+                        {this.userApproved()}
+                        <View style={{height: 100}}>{/*占位*/}</View>
+                        {this.renderBtn()}
+                    </ScrollView>
+                    <ActionButton buttonColor="#D92553" offsetX={34} offsetY={100}>
+                        <ActionButton.Item buttonColor='rgba(231,76,60,0)' title="主页" onPress={() => Actions.home()}>
+                            <Image
+                                source={{uri: 'https://images.ufutx.com/201910/22/44641052ec087246a15e8551df3adfac.png'}}
+                                style={[styles.thumbnail,{width: 80, height: 80,marginTop: 12}]}
+                            />
+                        </ActionButton.Item>
+                        <ActionButton.Item buttonColor='rgba(231,76,60,0)' title="帮我联系Ta" onPress={this.callMerchant}>
+                            <Image
+                                source={{uri: 'https://images.ufutx.com/201910/22/54a015f92ad58f0583f163c334782c24.png'}}
+                                style={[styles.thumbnail,{width: 80, height: 80,marginTop: 12}]}
+                            />
+                        </ActionButton.Item>
+                    </ActionButton>
+                    <Modal
+                        popup
+                        visible={this.state.visible}
+                        animationType="slide-up"
+                        onClose={this.onClose}
+                    >
+                        <View style={{ }}>
+                            <Text style={[styles.ModalItem]} onPress={this.report}>举报</Text>
+                            <Text style={[styles.ModalItem, {borderBottomColor: '#f6f6f6', borderBottomWidth: 6,}]} onPress={this.shieldFn}>拉黑</Text>
+                            <Text style={[styles.ModalItem, {borderBottomWidth: 0}]} onPress={this.onClose}>取消</Text>
+                        </View>
+                    </Modal>
+                </View>
+            </SafeAreaView>
         );
     }
     // 基本资料
