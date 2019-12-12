@@ -194,6 +194,7 @@ dependencies {
     implementation "com.facebook.react:react-native:+"  // From node_modules
     implementation 'com.google.firebase:firebase-core:17.0.0'
     implementation project(':RCTWeChat') // Add this line
+    compile project(':react-native-yunpeng-alipay')
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";
         debugImplementation files(hermesPath + "hermes-debug.aar")
