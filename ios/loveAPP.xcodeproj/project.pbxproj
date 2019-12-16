@@ -45,7 +45,7 @@
 			remoteGlobalIDString = 2D02E47A1E0B4A5D006451C7;
 			remoteInfo = "loveAPP-tvOS";
 		};
-		9C67BC0223A37CC200C322F4 /* PBXContainerItemProxy */ = {
+		9C67BBF523A24EC800C322F4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 981713990DE74F6BB5BEC1EB /* AlipayModule.xcodeproj */;
 			proxyType = 2;
@@ -254,10 +254,10 @@
 			name = "Recovered References";
 			sourceTree = "<group>";
 		};
-		9C67BBFF23A37CC200C322F4 /* Products */ = {
+		9C67BBF223A24EC800C322F4 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				9C67BC0323A37CC200C322F4 /* libAlipayModule.a */,
+				9C67BBF623A24EC800C322F4 /* libAlipayModule.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -386,7 +386,7 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 9C67BBFF23A37CC200C322F4 /* Products */;
+					ProductGroup = 9C67BBF223A24EC800C322F4 /* Products */;
 					ProjectRef = 981713990DE74F6BB5BEC1EB /* AlipayModule.xcodeproj */;
 				},
 			);
@@ -401,11 +401,11 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		9C67BC0323A37CC200C322F4 /* libAlipayModule.a */ = {
+		9C67BBF623A24EC800C322F4 /* libAlipayModule.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libAlipayModule.a;
-			remoteRef = 9C67BC0223A37CC200C322F4 /* PBXContainerItemProxy */;
+			remoteRef = 9C67BBF523A24EC800C322F4 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
