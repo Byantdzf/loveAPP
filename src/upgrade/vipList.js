@@ -174,8 +174,8 @@ export default class vipList extends Component {
     }
 
     renderBtn() {
-        let sub_one = this.state.sub_ranks[0]
-        let sub_two = this.state.sub_ranks[1]
+        let sub_one = this.state.sub_ranks[0];
+        let sub_two = this.state.sub_ranks[1];
         return (
             <View style={styles.mainBtn}>
                 <View style={styles.btnStyle} onTouchEnd={()=>{this.vipPay(sub_one.id)}}>
@@ -225,7 +225,7 @@ const styles = StyleSheet.create({
         width: width,
         height: 52,
         position: 'absolute',
-        bottom: 16,
+        bottom: width*0.1,
         left: 0,
         backgroundColor: '#D92553',
         flex: 1, flexDirection: 'row',
