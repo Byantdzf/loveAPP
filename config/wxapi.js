@@ -16,6 +16,7 @@ export default class WX {
                         sign: 'xxxxxxxxx'       // 商家根据微信开放平台文档对数据做的签名
                     }).then((requestJson) => {
                         //支付成功回调
+                        Toast.fail('唧唧');
                         if (requestJson.errCode == "0") {
                             //回调成功处理
                         }
