@@ -22,7 +22,9 @@ import AsyncStorage from "@react-native-community/async-storage";
 // import Basics from '../../src/user/basics'
 import CommonAvatar from '../components/commonAvatar'
 import WX from '../../config/wxapi'
-import Alipay from 'react-native-yunpeng-alipay';
+
+
+
 export default class vipList extends Component {
     constructor(props) { // 初始化数据
         super(props);
@@ -116,31 +118,18 @@ export default class vipList extends Component {
     }
 
     vipPay(id) {
-        fetchRequest(`official/app/member/recharge?sub_rank_id=${id}&trade_type=alipay_app`, 'POST')
+        let loading = Toast.loading('支付中...')
+        fetchRequest(`official/app/member/recharge?sub_rank_id=${id}`, 'POST')
             .then(res => {
+                Portal.remove(loading)
                 if (res.code != 0) {
                     return
                 }
-                console.log(res.data.wx_pay)
-                this._aliPay(res.data.wx_pay)
-                // let {wx_pay} = res.data
-                // WX.pay(wx_pay.config)
+                let {wx_pay} = res.data
+                WX.pay(wx_pay.config)
             }).catch(err => {
             console.log(`异常: ${err}`);
         })
-    }
-    _aliPay(data) {
-        let loading = Toast.loading('支付中...')
-        console.log("点击进行支付")
-        // let data = 'partner=\"asdfasdf\"&seller_id=\"asdfasdf@qq.com\"&out_trade_no=\"ALIPAY15307684880120000000001\"&subject=\"描述\"&body=\"在线支付\"&total_fee=\"0.01\"&notify_url=\"http://xx.xx.xx.xx/api/0/alipay/alipayCallback\"&service=\"m.pay\"&payment_type=\"1\"&_input_charset=\"utf-8\"&it_b_pay=\"30m\"&sign=\sdfasdf\"&sign_type=\"RSA\"';
-        Alipay.pay(data).then(function(data){
-            console.log(data);
-            Portal.remove(loading)
-            Toast.success('支付成功')
-        }, function (err) {
-            console.log(err,'err');
-            Toast.fail('支付失败')
-        });
     }
 
     renderTab() {
