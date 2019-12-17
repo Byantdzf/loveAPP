@@ -22,6 +22,8 @@ import AsyncStorage from "@react-native-community/async-storage";
 // import Basics from '../../src/user/basics'
 import CommonAvatar from '../components/commonAvatar'
 import WX from '../../config/wxapi'
+
+
 export default class vipList extends Component {
     constructor(props) { // 初始化数据
         super(props);
