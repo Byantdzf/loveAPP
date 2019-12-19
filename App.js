@@ -61,6 +61,9 @@ import * as WeChat from "react-native-wechat"; // 微信测试
 
 type Props = {};
 export default class App extends Component<Props> {
+    // componentDidMount() {
+    //     WeChat.registerApp('wx2aa846fb62df72c9');
+    // }
     render() {
         return (
             <Router>
@@ -76,7 +79,7 @@ export default class App extends Component<Props> {
                            component={welcome}
                            title="启动页"
                            hideNavBar={true}
-                           initial
+                           // initial
                     />
                     <Scene key="login"
                            component={login}
@@ -125,7 +128,7 @@ export default class App extends Component<Props> {
                            component={upgradeVIP}
                            title="VIP升级"
                            hideNavBar={true}
-                           // initial
+                           initial
                     />
                     <Scene key="authentication"
                            component={authentication}

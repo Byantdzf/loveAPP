@@ -118,14 +118,21 @@ export default class vipList extends Component {
 
     vipPay(id) {
         let loading = Toast.loading('支付中...')
-        fetchRequest(`official/app/member/recharge?sub_rank_id=${id}`, 'POST')
+        fetchRequest(`official/app/member/recharge?sub_rank_id=${id}&trade_type=wechat_app`, 'POST')
             .then(res => {
                 Portal.remove(loading)
-                if (res.code != 0) {
-                    return
-                }
                 let {wx_pay} = res.data
-                WX.pay(wx_pay.config)
+                let { config} = wx_pay
+                console.log(config)
+                // let payConfig = {}
+                // console.log(config)
+                // for (let item in config) {
+                //     payConfig[item] = config[item]
+                //     console.log(config[item])
+                // }
+                // payConfig.partnerId = partnerId
+                // payConfig.prepayId = prepayId
+                WX.pay(config)
             }).catch(err => {
             console.log(`异常: ${err}`);
         })

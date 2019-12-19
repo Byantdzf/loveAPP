@@ -99,8 +99,6 @@ export default class login extends Component {
         fetchRequest('official/app/login', 'POST', data)
             .then(res => {
                 console.log(res)
-                Portal.remove(loading)
-
                 if (res.code == 1){
                     Toast.offline(res.message);
                     this.inputRef.focus();
@@ -119,8 +117,9 @@ export default class login extends Component {
                     // DeviceStorage.save("token", res.data.token);
                     // DeviceStorage.save("user", res.data.user);
                 }
+                Portal.remove(loading)
             }).catch(err => {
-            console.log(`异常: ${err}`);
+            Toast.fail(`异常: ${err}`);
         })
     }
 
