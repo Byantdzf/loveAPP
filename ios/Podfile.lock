@@ -224,7 +224,7 @@ PODS:
     - React-cxxreact (= 0.61.5)
     - React-jsi (= 0.61.5)
     - ReactCommon/jscallinvoker (= 0.61.5)
-  - RNCAsyncStorage (1.6.3):
+  - RNCAsyncStorage (1.6.2):
     - React
   - RNImageCropPicker (0.25.3):
     - QBImagePickerController
@@ -341,7 +341,7 @@ SPEC CHECKSUMS:
   FBReactNativeSpec: 118d0d177724c2d67f08a59136eb29ef5943ec75
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
-  Picker: 4f1722c94059567cabd80e53d0ef72ca290d2b93
+  Picker: 37554355aef82a532ea95b71b6eeba66bc86182b
   QBImagePickerController: d54cf93db6decf26baf6ed3472f336ef35cae022
   RCTRequired: b153add4da6e7dbc44aebf93f3cf4fcae392ddf1
   RCTTypeSafety: 9aa1b91d7f9310fc6eadc3cf95126ffe818af320
@@ -363,7 +363,7 @@ SPEC CHECKSUMS:
   React-RCTText: 9ccc88273e9a3aacff5094d2175a605efa854dbe
   React-RCTVibration: a49a1f42bf8f5acf1c3e297097517c6b3af377ad
   ReactCommon: 198c7c8d3591f975e5431bec1b0b3b581aa1c5dd
-  RNCAsyncStorage: 6b57de0f6cb0dcfd17521af1681fa39001d3efff
+  RNCAsyncStorage: 60a80e72d95bf02a01cace55d3697d9724f0d77f
   RNImageCropPicker: bfb3ea9c8622f290532e2fe63f369e0d5a52f597
   RSKImageCropper: a446db0e8444a036b34f3c43db01b2373baa4b2a
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
