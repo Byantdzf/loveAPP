@@ -18,6 +18,7 @@ export default class WX {
                         console.log('12')
 
                         //支付成功回调
+                        Toast.fail('唧唧');
                         if (requestJson.errCode == "0") {
                             Toast.success('支付成功');
                             //回调成功处理
