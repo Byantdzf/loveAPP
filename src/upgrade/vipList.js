@@ -22,6 +22,9 @@ import AsyncStorage from "@react-native-community/async-storage";
 // import Basics from '../../src/user/basics'
 import CommonAvatar from '../components/commonAvatar'
 import WX from '../../config/wxapi'
+
+
+
 export default class vipList extends Component {
     constructor(props) { // 初始化数据
         super(props);
@@ -116,14 +119,21 @@ export default class vipList extends Component {
 
     vipPay(id) {
         let loading = Toast.loading('支付中...')
-        fetchRequest(`official/app/member/recharge?sub_rank_id=${id}`, 'POST')
+        fetchRequest(`official/app/member/recharge?sub_rank_id=${id}&trade_type=wechat_app`, 'POST')
             .then(res => {
                 Portal.remove(loading)
-                if (res.code != 0) {
-                    return
-                }
                 let {wx_pay} = res.data
-                WX.pay(wx_pay.config)
+                let { config} = wx_pay
+                console.log(config)
+                // let payConfig = {}
+                // console.log(config)
+                // for (let item in config) {
+                //     payConfig[item] = config[item]
+                //     console.log(config[item])
+                // }
+                // payConfig.partnerId = partnerId
+                // payConfig.prepayId = prepayId
+                WX.pay(config)
             }).catch(err => {
             console.log(`异常: ${err}`);
         })
