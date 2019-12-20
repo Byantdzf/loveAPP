@@ -66,9 +66,40 @@ export default class App extends Component<Props> {
     // }
     render() {
         return (
-            <Router>
-                {/*<Modal>*/}
-                <Scene key="root">
+            <Router sceneStyle={{ backgroundColor: 'white' }}>
+                <Modal>
+                    <Scene key="root" tabBarPosition="bottom" tabs hideNavBar={true} activeTintColor={'#d92553'}>
+                        <Scene hideBackImage
+                               key="IOS"
+                               title="主页"
+                               component={home}
+                               icon={TabIcon}
+                               hideNavBar={true}
+                               Image={require('./src/image/tabBar/home.png')}
+                               selectedImage={require('./src/image/tabBar/homeActive.png')}
+
+                        />
+
+                        <Scene hideBackImage
+                               key="Web"
+                               component={Web}
+                               title="消息"
+                               icon={TabIcon}
+                               hideNavBar={true}
+                               Image={require('./src/image/tabBar/message.png')}
+                               selectedImage={require('./src/image/tabBar/messageActive.png')}
+                        />
+
+                        <Scene hideBackImage
+                               key="Android"
+                               component={Android}
+                               title="我的"
+                               icon={TabIcon}
+                               Image={require('./src/image/tabBar/my.png')}
+                               hideNavBar={true}  //隐藏导航栏
+                               selectedImage={require('./src/image/tabBar/myActive.png')}
+                        />
+                    </Scene>
                     <Scene key="test"
                            component={test}
                            title="测试"
@@ -79,13 +110,13 @@ export default class App extends Component<Props> {
                            component={welcome}
                            title="启动页"
                            hideNavBar={true}
-                           // initial
+                           initial
                     />
                     <Scene key="login"
                            component={login}
                            title="登录"
                            hideNavBar={true}
-                           // initial
+                        // initial
                     />
                     <Scene
                         key="protocol"
@@ -96,7 +127,7 @@ export default class App extends Component<Props> {
                            component={basics}
                            title="基本资料"
                            hideNavBar={true}
-                           // initial
+                        // initial
                     />
                     <Scene key="userData"
                            component={userData}
@@ -107,7 +138,7 @@ export default class App extends Component<Props> {
                            component={home}
                            title="首页"
                            hideNavBar={true}
-                           // initial
+                        // initial
                     />
                     <Scene key="userDetail"
                            component={userDetail}
@@ -128,13 +159,12 @@ export default class App extends Component<Props> {
                            component={upgradeVIP}
                            title="VIP升级"
                            hideNavBar={true}
-                           initial
                     />
                     <Scene key="authentication"
                            component={authentication}
                            title="实名认证"
                            hideNavBar={true}
-                           // initial
+                        // initial
                     />
                     <Scene key="setting"
                            component={setting}
@@ -152,39 +182,7 @@ export default class App extends Component<Props> {
                         title="Gray"
                     />
 
-                </Scene>
-                {/*<Scene key="root" tabBarPosition="bottom" tabs>*/}
-                {/*<Scene hideBackImage*/}
-                {/*key="IOS"*/}
-                {/*title="苹果"*/}
-                {/*component={IOS}*/}
-                {/*icon={TabIcon}*/}
-                {/*showLabel = {false}*/}
-                {/*Image={require('./src/image/ios.png')}*/}
-                {/*selectedImage={require('./src/image/ios_active.png')}*/}
-                {/*/>*/}
-
-                {/*<Scene hideBackImage*/}
-                {/*key="Web"*/}
-                {/*component={Web}*/}
-                {/*title="web"*/}
-                {/*icon={TabIcon}*/}
-                {/*Image={require('./src/image/web.png')}*/}
-                {/*showLabel = {true}*/}
-                {/*selectedImage={require('./src/image/web_active.png')}*/}
-                {/*/>*/}
-
-                {/*<Scene hideBackImage*/}
-                {/*key="Android"*/}
-                {/*component={Android}*/}
-                {/*title="安卓"*/}
-                {/*icon={TabIcon}*/}
-                {/*Image={require('./src/image/android.png')}*/}
-                {/*hideNavBar={true}  //隐藏导航栏*/}
-                {/*selectedImage={require('./src/image/android_active.png')}*/}
-                {/*/>*/}
-                {/*</Scene>*/}
-                {/*</Modal>*/}
+                </Modal>
             </Router>
         );
     }
@@ -196,7 +194,9 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "#f6f6f6",
         overflow: 'visible'
-
+    },
+    tabBar: {
+        height: 70  //tabbar的高度
     },
     tabIconItem: {
         flex: 1,

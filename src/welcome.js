@@ -19,7 +19,7 @@ export default class Bananas extends Component {
                     }, 800)
                 } else {
                     setTimeout(() => {
-                        Actions.home()
+                        Actions.IOS()
                     }, 800)
                 }
             }
