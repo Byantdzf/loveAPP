@@ -1,5 +1,5 @@
 import Picker from 'react-native-picker';
-
+// 滚动选择框
 export default class Pickers {
     static show(data, selectValue, ConfirmFn) {
         console.log(selectValue)

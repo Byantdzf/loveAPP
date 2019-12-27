@@ -25,7 +25,9 @@ import TabIcon from './src/TabIcon'
 import welcome from './src/welcome'
 import login from './src/login';
 import GrayScreen from './src/GrayScreen ';
-import home from "./src/home";
+import home from "./src/tabBar/home";
+import user from "./src/tabBar/user";
+import news from "./src/tabBar/news";
 import userDetail from "./src/userDetail";
 import protocol from "./src/protocol";
 import test from "./src/test1";
@@ -37,7 +39,8 @@ import setting from './src/user/setting'  // 我的设置
 import upgradeVIP from './src/upgrade/vipList' // 会员升级
 import authentication from './src/user/authentication' // 实名认证
 import wxPay from './src/wxPay'
-import * as WeChat from "react-native-wechat"; // 微信测试
+import * as WeChat from "react-native-wechat";
+// import news from "./src/tabBar/news"; // 微信测试
 // const App = () => {
 //     return (
 //         <Router>
@@ -81,8 +84,8 @@ export default class App extends Component<Props> {
                         />
 
                         <Scene hideBackImage
-                               key="Web"
-                               component={Web}
+                               key="news"
+                               component={news}
                                title="消息"
                                icon={TabIcon}
                                hideNavBar={true}
@@ -91,8 +94,8 @@ export default class App extends Component<Props> {
                         />
 
                         <Scene hideBackImage
-                               key="Android"
-                               component={Android}
+                               key="user"
+                               component={user}
                                title="我的"
                                icon={TabIcon}
                                Image={require('./src/image/tabBar/my.png')}

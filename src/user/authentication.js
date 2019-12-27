@@ -16,7 +16,6 @@ import {Actions} from "react-native-router-flux";
 import {fetchRequest} from '../../config/FetchUtils';
 import {Button, InputItem, List, Toast, Provider, Drawer, Portal} from '@ant-design/react-native';
 import DeviceStorage from '../../config/DeviceStorage';
-import Pickers from '../../config/Picker'
 import DatePicker from 'react-native-datepicker'
 import AsyncStorage from "@react-native-community/async-storage";
 // import Basics from '../../src/user/basics'

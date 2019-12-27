@@ -1,5 +1,6 @@
 import * as WeChat from "react-native-wechat";
 import {Toast} from "@ant-design/react-native";
+// 微信配置
 export default class WX {
     static pay(config) {
         console.log(config,'asssss')

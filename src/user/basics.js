@@ -16,10 +16,9 @@ import {Actions} from "react-native-router-flux";
 import {fetchRequest} from '../../config/FetchUtils';
 import {Button, InputItem, List, Toast, Provider, Drawer} from '@ant-design/react-native';
 import DeviceStorage from '../../config/DeviceStorage';
-import Pickers from '../../config/Picker'
+import Pickers from '../components/commonPicker'
 import DatePicker from 'react-native-datepicker'
 import AsyncStorage from "@react-native-community/async-storage";
-// import Basics from '../../src/user/basics'
 import CommonAvatar from '../components/commonAvatar'
 
 export default class userData extends Component {

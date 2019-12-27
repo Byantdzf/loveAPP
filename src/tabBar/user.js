@@ -13,15 +13,15 @@ import {
     StatusBar,
     TextInput
 } from "react-native";
-import {fetchRequest} from '../config/FetchUtils';
+import {fetchRequest} from '../../config/FetchUtils';
 import {SearchBar, Toast, Provider, Drawer, Portal} from "@ant-design/react-native";
 import {Actions} from "react-native-router-flux";
-import CommunalNavBar from './components/communalNavBar';
+import CommunalNavBar from '../components/communalNavBar';
 
 let pageNo = 1;//当前第几页
 let totalPage = 5;//总的页数
 
-export default class SampleAppMovies extends Component {
+export default class user extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -148,15 +148,16 @@ export default class SampleAppMovies extends Component {
     renderTitleItem() {
         return (
             <TouchableOpacity>
-                <TextInput
-                    value={this.state.keyword}
-                    style={styles.searchStyle}
-                    onChangeText={text => this.onChange(text)}
-                    placeholder="搜索TA..."
-                    onBlur={value => {
-                        this.onSubmit(value)
-                    }}
-                />
+                {/*<TextInput*/}
+                    {/*value={this.state.keyword}*/}
+                    {/*style={styles.searchStyle}*/}
+                    {/*onChangeText={text => this.onChange(text)}*/}
+                    {/*placeholder="搜索TA..."*/}
+                    {/*onBlur={value => {*/}
+                        {/*this.onSubmit(value)*/}
+                    {/*}}*/}
+                {/*/>*/}
+                <Text style={{color: '#fff'}}>我的</Text>
             </TouchableOpacity>
         );
     }
@@ -177,46 +178,16 @@ export default class SampleAppMovies extends Component {
                    style={styles.refreshIcon}/>
             : <ActivityIndicator size="large" color="#D92553"/>;
         return (
-            <SafeAreaView style={{flex: 1, backgroundColor: '#d92553'}}>
-                <Drawer
-                    sidebar={this.sidebar()}
-                    position="left"
-                    open={false}
-                    drawerRef={el => (this.drawer = el)}
-                    onOpenChange={this.onOpenChange}
-                    drawerBackgroundColor="#fff"
-                    open={this.state.visible}
-                    drawerWidth={width}
-                >
-                    <View style={styles.containerv}>
-                        <CommunalNavBar
-                            leftItem={() => this.renderLeftItem()}
-                            titleItem={() => this.renderTitleItem()}
-                            rightItem={() => this.renderRightItem()}
-                        />
-                    </View>
-                    <Provider>
-                        <FlatList
-                            data={this.state.list}
-                            renderItem={this.renderMovie}
-                            style={styles.list}
-                            keyExtractor={(item, index) => index.toString()}
-                            ListFooterComponent={this._renderFooter.bind(this)}
-                            onEndReached={this._onEndReached.bind(this)}
-                            onEndReachedThreshold={1}
-                            ItemSeparatorComponent={this._separator}
-                        />
-                        <View style={{padding: 12, backgroundColor: '#fff'}}></View>
-                        {/*<TouchableOpacity onPress={() => {this.fetchData()}} style={{ zIndex: 999999}}>*/}
-                        <View style={styles.refresh} onTouchEnd={this.refreshData}>
-                            <View style={styles.refreshLoad}>
-                                {loading}
-                            </View>
-                        </View>
-                        {/*</TouchableOpacity>*/}
-                    </Provider>
+            <SafeAreaView style={{flex: 1,}}>
+                    {/*<View style={styles.containerv}>*/}
+                        {/*<CommunalNavBar*/}
+                            {/*leftItem={() => this.renderLeftItem()}*/}
+                            {/*titleItem={() => this.renderTitleItem()}*/}
+                            {/*rightItem={() => this.renderRightItem()}*/}
+                        {/*/>*/}
+                    {/*</View>*/}
+                    {this.renderMovie()}
                     <StatusBar  translucent={false} backgroundColor='#D92553' barStyle="light-content"/>
-                </Drawer>
             </SafeAreaView>
         );
     }
@@ -233,16 +204,16 @@ export default class SampleAppMovies extends Component {
         return this.renderData();
     }
 
-    sidebar() {
+    renderMovie() {
         return (
             <View>
                 <View style={styles.sidebarTOP}>
-                    <TouchableOpacity style={{flexDirection: 'row', justifyContent: 'flex-end'}}
-                                      onPress={() => this.drawer && this.drawer.closeDrawer()}
-                    >
-                        <Image source={{uri: 'https://images.ufutx.com/201911/11/ef443905239d29665d4976264d51bbab.png'}}
-                               style={styles.sidebarBack}/>
-                    </TouchableOpacity>
+                    {/*<TouchableOpacity style={{flexDirection: 'row', justifyContent: 'flex-end'}}*/}
+                                      {/*onPress={() => this.drawer && this.drawer.closeDrawer()}*/}
+                    {/*>*/}
+                        {/*<Image source={{uri: 'https://images.ufutx.com/201911/11/ef443905239d29665d4976264d51bbab.png'}}*/}
+                               {/*style={styles.sidebarBack}/>*/}
+                    {/*</TouchableOpacity>*/}
                     <View style={{flexDirection: 'row'}} onTouchEnd={()=>{Actions.userData()}}>
                         <Image source={this.state.avatar}
                                style={styles.sidebarPic}/>
@@ -319,105 +290,6 @@ export default class SampleAppMovies extends Component {
                 <ActivityIndicator size="small" color="#D92553"/>
                 <Text style={{marginLeft: 12, color: '#666666'}}>加载中...</Text>
             </View>
-        );
-    }
-
-    _renderFooter() {
-        if (this.state.showFoot === 1) {
-            return (
-                <View style={{height: 30, alignItems: 'center', justifyContent: 'flex-start',}}>
-                    <Text style={{color: '#999999', fontSize: 14, marginTop: 5, marginBottom: 5,}}>
-                        没有更多数据了
-                    </Text>
-                </View>
-            );
-        } else if (this.state.showFoot === 2) {
-            return (
-                <View style={styles.footer}>
-                    <ActivityIndicator/>
-                    <Text>正在加载更多数据...</Text>
-                </View>
-            );
-        } else if (this.state.showFoot === 0) {
-            return (
-                <View style={styles.footer}>
-                    <Text></Text>
-                </View>
-            );
-        }
-    }
-
-    _separator() {
-        return <View style={{height: 6, backgroundColor: '#f5f6f9'}}/>;
-    }
-
-    _onEndReached() {
-        //如果是正在加载中或没有更多数据了，则返回
-        if (this.state.showFoot != 0) {
-            return;
-        }
-        //如果当前页大于或等于总页数，那就是到最后一页了，返回
-        if ((pageNo != 1) && (pageNo >= totalPage)) {
-            return;
-        } else {
-            pageNo++;
-        }
-        //底部显示正在加载更多数据
-        this.setState({showFoot: 2});
-        //获取数据
-        this.fetchData(pageNo);
-    }
-
-    renderMovie({item}) {
-        // { item }是一种“解构”写法，请阅读ES2015语法的相关文档
-        // item也是FlatList中固定的参数名，请阅读FlatList的相关文档
-        let id = item.id
-        let man = {uri: 'https://images.ufutx.com/201910/21/a92b5d29dedb9932568f97fcdff865bc.png'};
-        let woman = {uri: 'https://images.ufutx.com/201910/21/40b26d71cf2af9b1be0f874605c6ef2f.png'};
-        let iconText = ''
-        if (item.profile_courtship) {
-            iconText = item.profile_courtship.sex == 1 ?
-                <Image source={man} style={styles.iconStyle}/> :
-                <Image source={woman} style={styles.iconStyle}/>;
-        } else {
-            iconText = <Image source={man} style={styles.iconStyle}/>
-        }
-
-        return (
-            <TouchableOpacity onPress={() => {
-                Actions.userDetail({id, id})
-            }}>
-                <View>
-                    <View style={styles.container}>
-                        <Image
-                            source={{uri: item.photo}}
-                            style={[{width: width * .92, height: width * .9}]}
-                        />
-                    </View>
-                    <View style={styles.containerText}>
-                        <View style={{
-                            flexDirection: "row",
-                            justifyContent: "flex-start",
-                            alignItems: 'center',
-                            flex: 1,
-                        }}>
-                            <Text style={{marginLeft: 8,}}>{item.name}</Text>
-                            {iconText}
-                        </View>
-                        <Text style={{
-                            marginRight: 4,
-                            color: '#97979f',
-                            fontSize: 12
-                        }}>{item.profile_courtship ? item.profile_courtship.province : '未获取'} {item.profile_courtship?item.profile_courtship.city:'未获取'}</Text>
-                    </View>
-                    <View style={[styles.containerText, {marginTop: -8}]}>
-                        <Text style={{marginLeft: 8, color: '#97979f', fontSize: 12}}>
-                            {item.age} {item.profile_courtship?item.profile_courtship.stature + 'cm':'未获取'} {item.industry}/{item.industry_sub}
-                        </Text>
-                    </View>
-                    {/*<View style={[styles.dotStyle,{width: width}]}></View>*/}
-                </View>
-            </TouchableOpacity>
         );
     }
 }
@@ -529,7 +401,8 @@ const styles = StyleSheet.create({
         color: '#666'
     },
     sidebarTOP: {
-        height: height*0.3,
+        paddingTop: 16,
+        paddingBottom: 12,
         backgroundColor: '#D92553',
     },
     sidebarBack: {

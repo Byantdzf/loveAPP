@@ -18,7 +18,7 @@ import {fetchRequest} from '../config/FetchUtils';
 import {Toast, Provider, Carousel, Modal, List} from "@ant-design/react-native";
 import {Actions} from "react-native-router-flux";
 import ActionButton from 'react-native-action-button';
-import Pickers from '../config/Picker'
+import Pickers from './components/commonPicker'
 
 
 export default class SampleAppMovies extends Component {
