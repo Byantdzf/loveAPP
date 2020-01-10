@@ -14,13 +14,9 @@ export default class Bananas extends Component {
             console.log(error,result)
             if (!error) {
                 if (result == null || result == '') {
-                    setTimeout(() => {
-                        Actions.login()
-                    }, 800)
+                    Actions.login()
                 } else {
-                    setTimeout(() => {
-                        Actions.IOS()
-                    }, 800)
+                    Actions.IOS()
                 }
             }
         })
@@ -40,10 +36,7 @@ export default class Bananas extends Component {
 
     //已经加载虚拟DOM，在render之后，只执行一次，可在此完成异步网络请求或集成其他JavaScript库
     componentDidMount() {
-        // console.log('componentDidMount...')
-        setTimeout(()=>{
-            this.getLoginState()
-        },100)
+        this.getLoginState()
     }
 
     render() {

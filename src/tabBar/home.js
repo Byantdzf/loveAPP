@@ -77,6 +77,7 @@ export default class home extends Component {
                 console.log(this.state.user)
                 Portal.remove(loading)
             }).catch(err => {
+            Toast.fail(err)
             console.log(`异常: ${err}`);
         })
     }
@@ -107,6 +108,7 @@ export default class home extends Component {
                 }, .4)
                 console.log(this.state.list)
             }).catch(err => {
+            Toast.fail(err)
             console.log(`异常: ${err}`);
         })
     }

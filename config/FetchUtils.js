@@ -3,7 +3,7 @@ import DeviceStorage from '../config/DeviceStorage';
 import {Actions} from "react-native-router-flux";
 import AsyncStorage from "@react-native-community/async-storage";
 import {Toast,Modal} from '@ant-design/react-native';
-//  接口封装
+
 /**
  * 让fetch也可以timeout
  *  timeout不是请求连接超时的含义，它表示请求的response时间，包括请求的连接、服务器处理及服务器响应回来的时间
