@@ -5275,6 +5275,11 @@ react-native-picker@^4.3.7:
   resolved "https://registry.npm.taobao.org/react-native-picker/download/react-native-picker-4.3.7.tgz#9842e8c62ff0d8b676e9514d9f9172413c0518a8"
   integrity sha1-mELoxi/w2LZ26VFNn5FyQTwFGKg=
 
+react-native-refresh-list-view@^1.0.10:
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/react-native-refresh-list-view/-/react-native-refresh-list-view-1.0.12.tgz#1d5a836b0106698068594efd7d8f71e8f8323366"
+  integrity sha512-7gClfW2NEzd6yoHgLUzM8IJCEd4yPAHzd89tIO45V7AU9VVfhcpIqDrqfFykDRmu0qH3hxKTO5rg+fbHtLGLQQ==
+
 react-native-refreshlist@^1.0.3:
   version "1.0.3"
   resolved "https://registry.npm.taobao.org/react-native-refreshlist/download/react-native-refreshlist-1.0.3.tgz#04d18fd5e5d45869d4d5f0c5a836ab92b83edac1"
@@ -6746,9 +6751,9 @@ xtend@~4.0.1:
   integrity sha1-u3J3n1+kZRhrH0OPZ0+jR/2121Q=
 
 y18n@^3.2.1:
-  version "3.2.1"
-  resolved "https://registry.npm.taobao.org/y18n/download/y18n-3.2.1.tgz#6d15fba884c08679c0d77e88e7759e811e07fa41"
-  integrity sha1-bRX7qITAhnnA136I53WegR4H+kE=
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/y18n/-/y18n-3.2.2.tgz#85c901bd6470ce71fc4bb723ad209b70f7f28696"
+  integrity sha512-uGZHXkHnhF0XeeAPgnKfPv1bgKAYyVvmNL1xlKsPYZPaIHxGti2hHqvOCQv71XMsLxu1QjergkqogUnms5D3YQ==
 
 "y18n@^3.2.1 || ^4.0.0", y18n@^4.0.0:
   version "4.0.0"
