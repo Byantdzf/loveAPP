@@ -5146,9 +5146,9 @@ punycode@^2.1.0, punycode@^2.1.1:
   integrity sha1-tYsBCsQMIsVldhbI0sLALHv0eew=
 
 qs@~6.5.2:
-  version "6.5.2"
-  resolved "https://registry.npm.taobao.org/qs/download/qs-6.5.2.tgz?cache=0&sync_timestamp=1569207136481&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fqs%2Fdownload%2Fqs-6.5.2.tgz#cb3ae806e8740444584ef154ce8ee98d403f3e36"
-  integrity sha1-yzroBuh0BERYTvFUzo7pjUA/PjY=
+  version "6.5.3"
+  resolved "https://registry.yarnpkg.com/qs/-/qs-6.5.3.tgz#3aeeffc91967ef6e35c0e488ef46fb296ab76aad"
+  integrity sha512-qxXIEh4pCGfHICj1mAJQ2/2XVZkjCDTcEgfoSQxc/fYivUZxTkk7L3bDBJSoNrEzXI17oUO5Dp07ktqE5KzczA==
 
 query-string@^6.1.0:
   version "6.8.3"
@@ -5274,6 +5274,11 @@ react-native-picker@^4.3.7:
   version "4.3.7"
   resolved "https://registry.npm.taobao.org/react-native-picker/download/react-native-picker-4.3.7.tgz#9842e8c62ff0d8b676e9514d9f9172413c0518a8"
   integrity sha1-mELoxi/w2LZ26VFNn5FyQTwFGKg=
+
+react-native-refresh-list-view@^1.0.10:
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/react-native-refresh-list-view/-/react-native-refresh-list-view-1.0.12.tgz#1d5a836b0106698068594efd7d8f71e8f8323366"
+  integrity sha512-7gClfW2NEzd6yoHgLUzM8IJCEd4yPAHzd89tIO45V7AU9VVfhcpIqDrqfFykDRmu0qH3hxKTO5rg+fbHtLGLQQ==
 
 react-native-refreshlist@^1.0.3:
   version "1.0.3"
